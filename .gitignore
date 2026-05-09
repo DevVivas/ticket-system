@@ -1,0 +1,18 @@
+.vscode/
+
+# # Compilados de Java y Maven
+# target/
+# *.class
+# *.jar
+# *.war
+
+# .idea/
+# *.iml
+
+# # Archivos del sistema
+# .DS_Store
+# Thumbs.db
+
+# # Logs y archivos temporales
+# *.log
+# temp/
