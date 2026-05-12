@@ -3,6 +3,7 @@ package com.ticket_system.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.ToString;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class Artista {
 
     private LocalDateTime actualizadoEn;
 
+    // @ToString.Exclude evita StackOverflowError por referencia circular
+    @ToString.Exclude
     @OneToMany(mappedBy = "artista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AgendaArtista> agenda;
 
