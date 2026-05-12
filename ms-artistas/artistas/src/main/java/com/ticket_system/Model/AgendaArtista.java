@@ -3,6 +3,7 @@ package com.ticket_system.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,6 +15,8 @@ public class AgendaArtista {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // @ToString.Exclude evita StackOverflowError por referencia circular
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artista_id", nullable = false)
     private Artista artista;
