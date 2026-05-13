@@ -53,7 +53,8 @@ public class GlobalExceptionHandler {
         body.put("status", 422);
         body.put("error", "Business Error");
         body.put("message", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
+        // return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
+        return ResponseEntity.unprocessableContent().body(body);
     }
 
     @ExceptionHandler(Exception.class)
