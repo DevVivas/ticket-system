@@ -65,7 +65,7 @@ public class ValidacionService {
                     .get()
                     .uri(msEventosUrl + "/api/eventos/" + dto.getEventoId())
                     .retrieve()
-                    .bodyToMono(Map.class)
+                    .bodyToMono(new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
             logger.info("[VALIDACION] Evento {} verificado en ms-eventos", dto.getEventoId());
         } catch (Exception e) {
@@ -125,11 +125,11 @@ public class ValidacionService {
         } else {
             // Comunicacion con ms-tickets para verificar el ticket
             try {
-                Map ticketData = webClientBuilder.build()
+                Map<String, Object> ticketData = webClientBuilder.build()
                         .get()
                         .uri(msTicketsUrl + "/api/tickets/" + dto.getTicketId())
                         .retrieve()
-                        .bodyToMono(Map.class)
+                        .bodyToMono(new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {})
                         .block();
 
                 if (ticketData != null) {
