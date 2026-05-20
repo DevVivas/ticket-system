@@ -39,9 +39,7 @@ public class VentaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Venta> getById(@PathVariable Long id) {
-        return ventaService.obtenerPorId(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(ventaService.obtenerPorId(id));
     }
 
     @GetMapping("/comprador/{compradorId}")
