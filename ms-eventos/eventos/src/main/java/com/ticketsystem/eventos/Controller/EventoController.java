@@ -29,9 +29,7 @@ public class EventoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Evento> getById(@PathVariable Long id) {
-        return eventoService.obtenerPorId(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(eventoService.obtenerPorId(id));
     }
 
     @PostMapping

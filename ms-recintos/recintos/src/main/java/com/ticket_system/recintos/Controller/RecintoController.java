@@ -41,9 +41,7 @@ public class RecintoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Recinto> getById(@PathVariable Long id) {
-        return recintoService.obtenerPorId(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(recintoService.obtenerPorId(id));
     }
 
     @PostMapping

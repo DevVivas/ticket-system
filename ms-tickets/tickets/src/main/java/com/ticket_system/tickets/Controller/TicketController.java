@@ -39,16 +39,12 @@ public class TicketController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Ticket> getById(@PathVariable Long id) {
-        return ticketService.obtenerPorId(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(ticketService.obtenerPorId(id));
     }
 
     @GetMapping("/codigo/{codigo}")
     public ResponseEntity<Ticket> getByCodigo(@PathVariable String codigo) {
-        return ticketService.obtenerPorCodigo(codigo)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(ticketService.obtenerPorCodigo(codigo));
     }
 
     @GetMapping("/evento/{eventoId}")
