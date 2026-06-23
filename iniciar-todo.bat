@@ -1,6 +1,7 @@
 @echo off
 echo Iniciando todos los microservicios...
 
+start cmd /k "cd /d %~dp0ms-auth\auth && mvnw.cmd spring-boot:run"
 start cmd /k "cd /d %~dp0ms-recintos\recintos && mvnw.cmd spring-boot:run"
 start cmd /k "cd /d %~dp0ms-eventos\eventos && mvnw.cmd spring-boot:run"
 start cmd /k "cd /d %~dp0ms-tickets\tickets && mvnw.cmd spring-boot:run"
