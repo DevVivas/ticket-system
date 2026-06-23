@@ -4,54 +4,60 @@ server:
 spring:
   cloud:
     gateway:
-      mvc:
-        routes:
-          - id: ms-eventos
-            uri: http://localhost:8081
-            predicates:
-              - Path=/api/eventos, /api/eventos/**
+      server:
+        webmvc:
+          routes:
+            - id: ms-auth
+              uri: ${MS_AUTH_URL:http://localhost:8091}
+              predicates:
+                - Path=/api/auth/**
 
-          - id: ms-recintos
-            uri: http://localhost:8082
-            predicates:
-              - Path=/api/recintos, /api/recintos/**
+            - id: ms-eventos
+              uri: ${MS_EVENTOS_URL:http://localhost:8081}
+              predicates:
+                - Path=/api/eventos/**
 
-          - id: ms-tickets
-            uri: http://localhost:8083
-            predicates:
-              - Path=/api/tickets, /api/tickets/**
+            - id: ms-recintos
+              uri: ${MS_RECINTOS_URL:http://localhost:8082}
+              predicates:
+                - Path=/api/recintos/**
 
-          - id: ms-ventas
-            uri: http://localhost:8084
-            predicates:
-              - Path=/api/ventas, /api/ventas/**
+            - id: ms-tickets
+              uri: ${MS_TICKETS_URL:http://localhost:8083}
+              predicates:
+                - Path=/api/tickets/**
 
-          - id: ms-validacion
-            uri: http://localhost:8085
-            predicates:
-              - Path=/api/validacion, /api/validacion/**
+            - id: ms-ventas
+              uri: ${MS_VENTAS_URL:http://localhost:8084}
+              predicates:
+                - Path=/api/ventas/**
 
-          - id: ms-artistas
-            uri: http://localhost:8086
-            predicates:
-              - Path=/api/artistas, /api/artistas/**
+            - id: ms-validacion
+              uri: ${MS_VALIDACION_URL:http://localhost:8085}
+              predicates:
+                - Path=/api/validacion/**
 
-          - id: ms-preventa
-            uri: http://localhost:8087
-            predicates:
-              - Path=/api/preventa, /api/preventa/**
+            - id: ms-artistas
+              uri: ${MS_ARTISTAS_URL:http://localhost:8086}
+              predicates:
+                - Path=/api/artistas/**
 
-          - id: ms-devoluciones
-            uri: http://localhost:8088
-            predicates:
-              - Path=/api/devoluciones, /api/devoluciones/**
+            - id: ms-preventa
+              uri: ${MS_PREVENTA_URL:http://localhost:8087}
+              predicates:
+                - Path=/api/preventa/**
 
-          - id: ms-promotores
-            uri: http://localhost:8089
-            predicates:
-              - Path=/api/promotores, /api/promotores/**
+            - id: ms-devoluciones
+              uri: ${MS_DEVOLUCIONES_URL:http://localhost:8088}
+              predicates:
+                - Path=/api/devoluciones/**
 
-          - id: ms-streaming
-            uri: http://localhost:8090
-            predicates:
-              - Path=/api/streamings, /api/streamings/**
+            - id: ms-promotores
+              uri: ${MS_PROMOTORES_URL:http://localhost:8089}
+              predicates:
+                - Path=/api/promotores/**
+
+            - id: ms-streaming
+              uri: ${MS_STREAMING_URL:http://localhost:8090}
+              predicates:
+                - Path=/api/streamings/**
