@@ -85,6 +85,7 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: root
       MS_EVENTOS_URL: http://ms-eventos:8081
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8086:8086"
     networks:
@@ -323,8 +324,45 @@ services:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./ms-artistas/artistas/grafana:/var/lib/grafana/dashboards/ms-artistas
     depends_on:
       - prometheus
+      - loki
+    networks:
+      - ticket-network
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # LOKI - almacena y permite consultar los logs de todos los microservicios
+  # ─────────────────────────────────────────────────────────────────────────
+  loki:
+    image: grafana/loki:2.9.6
+    container_name: loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/loki-config.yml
+      - loki_data:/loki
+    ports:
+      - "3100:3100"
+    networks:
+      - ticket-network
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # PROMTAIL - recolecta los logs (stdout) de los contenedores Docker y
+  # los envia a Loki
+  # ─────────────────────────────────────────────────────────────────────────
+  promtail:
+    image: grafana/promtail:2.9.6
+    container_name: promtail
+    restart: unless-stopped
+    command: -config.file=/etc/promtail/promtail-config.yml
+    volumes:
+      - ./loki/promtail-config.yml:/etc/promtail/promtail-config.yml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    depends_on:
+      - loki
     networks:
       - ticket-network
 
@@ -336,3 +374,4 @@ volumes:
   mysql_data:
   prometheus_data:
   grafana_data:
+  loki_data:

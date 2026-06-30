@@ -1,58 +1,338 @@
-global:
-  scrape_interval: 15s
+version: '3.8'
 
-scrape_configs:
-  - job_name: 'ms-eventos'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-eventos:8081']
+services:
 
-  - job_name: 'ms-recintos'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-recintos:8082']
+  # ─────────────────────────────────────────────────────────────────────────
+  # BASE DE DATOS MYSQL - UNA SOLA INSTANCIA PARA TODOS LOS MICROSERVICIOS
+  # ─────────────────────────────────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: ticket-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-tickets'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-tickets:8083']
+  # ─────────────────────────────────────────────────────────────────────────
+  # MICROSERVICIO DE AUTENTICACION - DEBE ARRANCAR PRIMERO
+  # ─────────────────────────────────────────────────────────────────────────
+  ms-auth:
+    build:
+      context: ./ms-auth/ms-auth
+      dockerfile: Dockerfile
+    container_name: ms-auth
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      JWT_SECRET: claveSecretaSuperSeguraParaTicketSystem2026QueDebeTenerAlMenos256Bits
+      JWT_EXPIRATION: 86400000
+    ports:
+      - "8091:8091"
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-ventas'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-ventas:8084']
+  # ─────────────────────────────────────────────────────────────────────────
+  # MICROSERVICIOS DE NEGOCIO
+  # ─────────────────────────────────────────────────────────────────────────
+  ms-recintos:
+    build:
+      context: ./ms-recintos/recintos
+      dockerfile: Dockerfile
+    container_name: ms-recintos
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    ports:
+      - "8082:8082"
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-validacion'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-validacion:8085']
+  ms-artistas:
+    build:
+      context: ./ms-artistas/artistas
+      dockerfile: Dockerfile
+    container_name: ms-artistas
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_EVENTOS_URL: http://ms-eventos:8081
+    ports:
+      - "8086:8086"
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-artistas'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-artistas:8086']
+  ms-eventos:
+    build:
+      context: ./ms-eventos/eventos
+      dockerfile: Dockerfile
+    container_name: ms-eventos
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_RECINTOS_URL: http://ms-recintos:8082
+      MS_ARTISTAS_URL: http://ms-artistas:8086
+    ports:
+      - "8081:8081"
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-preventa'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-preventa:8087']
+  ms-tickets:
+    build:
+      context: ./ms-tickets/tickets
+      dockerfile: Dockerfile
+    container_name: ms-tickets
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_EVENTOS_URL: http://ms-eventos:8081
+    ports:
+      - "8083:8083"
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-devoluciones'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-devoluciones:8088']
+  ms-ventas:
+    build:
+      context: ./ms-ventas/ventas
+      dockerfile: Dockerfile
+    container_name: ms-ventas
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_TICKETS_URL: http://ms-tickets:8083
+      MS_EVENTOS_URL: http://ms-eventos:8081
+    ports:
+      - "8084:8084"
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-promotores'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-promotores:8089']
+  ms-validacion:
+    build:
+      context: ./ms-validacion/validacion
+      dockerfile: Dockerfile
+    container_name: ms-validacion
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_TICKETS_URL: http://ms-tickets:8083
+      MS_EVENTOS_URL: http://ms-eventos:8081
+    ports:
+      - "8085:8085"
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-streaming'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-streaming:8090']
+  ms-preventa:
+    build:
+      context: ./ms-preventa/preventa
+      dockerfile: Dockerfile
+    container_name: ms-preventa
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_EVENTOS_URL: http://ms-eventos:8081
+      MS_TICKETS_URL: http://ms-tickets:8083
+    ports:
+      - "8087:8087"
+    networks:
+      - ticket-network
 
-  - job_name: 'ms-auth'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['ms-auth:8091']
+  ms-devoluciones:
+    build:
+      context: ./ms-devoluciones/devoluciones
+      dockerfile: Dockerfile
+    container_name: ms-devoluciones
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_VENTAS_URL: http://ms-ventas:8084
+      MS_TICKETS_URL: http://ms-tickets:8083
+    ports:
+      - "8088:8088"
+    networks:
+      - ticket-network
+
+  ms-promotores:
+    build:
+      context: ./ms-promotores/promotores
+      dockerfile: Dockerfile
+    container_name: ms-promotores
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_VENTAS_URL: http://ms-ventas:8084
+    ports:
+      - "8089:8089"
+    networks:
+      - ticket-network
+
+  ms-streaming:
+    build:
+      context: ./ms-streaming/streaming
+      dockerfile: Dockerfile
+    container_name: ms-streaming
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_EVENTOS_URL: http://ms-eventos:8081
+      MS_TICKETS_URL: http://ms-tickets:8083
+    ports:
+      - "8090:8090"
+    networks:
+      - ticket-network
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # API GATEWAY - PUNTO DE ENTRADA UNICO, DEBE ARRANCAR AL FINAL
+  # ─────────────────────────────────────────────────────────────────────────
+  ms-api-gateway:
+    build:
+      context: ./ms-api-gateway/gateway
+      dockerfile: Dockerfile
+    container_name: ms-api-gateway
+    restart: unless-stopped
+    depends_on:
+      - ms-auth
+      - ms-eventos
+      - ms-recintos
+      - ms-tickets
+      - ms-ventas
+      - ms-validacion
+      - ms-artistas
+      - ms-preventa
+      - ms-devoluciones
+      - ms-promotores
+      - ms-streaming
+    environment:
+      MS_AUTH_URL: http://ms-auth:8091
+      MS_EVENTOS_URL: http://ms-eventos:8081
+      MS_RECINTOS_URL: http://ms-recintos:8082
+      MS_TICKETS_URL: http://ms-tickets:8083
+      MS_VENTAS_URL: http://ms-ventas:8084
+      MS_VALIDACION_URL: http://ms-validacion:8085
+      MS_ARTISTAS_URL: http://ms-artistas:8086
+      MS_PREVENTA_URL: http://ms-preventa:8087
+      MS_DEVOLUCIONES_URL: http://ms-devoluciones:8088
+      MS_PROMOTORES_URL: http://ms-promotores:8089
+      MS_STREAMING_URL: http://ms-streaming:8090
+    ports:
+      - "8080:8080"
+    networks:
+      - ticket-network
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # PROMETHEUS - recolecta metricas de todos los microservicios
+  # ─────────────────────────────────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - ticket-network
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # GRAFANA - dashboards visuales de las metricas de Prometheus
+  # ─────────────────────────────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - ticket-network
+
+networks:
+  ticket-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  prometheus_data:
+  grafana_data:

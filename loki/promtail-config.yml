@@ -1,0 +1,60 @@
+# ─────────────────────────────────────────────────────────────────────────
+# Configuración de Promtail — agente que recolecta los logs de los
+# contenedores Docker y los envía a Loki
+# ─────────────────────────────────────────────────────────────────────────
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # ───────────────────────────────────────────────────────────────────────
+  # Descubre automáticamente todos los contenedores Docker en ejecución
+  # y extrae sus logs (stdout/stderr)
+  # ───────────────────────────────────────────────────────────────────────
+  - job_name: docker
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+
+    relabel_configs:
+      # Usa el nombre del contenedor como etiqueta "container"
+      - source_labels: ["__meta_docker_container_name"]
+        regex: "/(.*)"
+        target_label: "container"
+
+      # Etiqueta "service" a partir del nombre de imagen (ej: ms-artistas)
+      - source_labels: ["__meta_docker_container_label_com_docker_compose_service"]
+        target_label: "service"
+
+      # Solo recolecta logs de los servicios del proyecto ticket-system
+      - source_labels: ["__meta_docker_container_label_com_docker_compose_project"]
+        target_label: "compose_project"
+
+      - source_labels: ["__meta_docker_container_log_stream"]
+        target_label: "stream"
+
+    pipeline_stages:
+      # Intenta parsear logs en formato JSON estructurado (logback-spring.xml)
+      - json:
+          expressions:
+            level: level
+            logger: logger_name
+            message: message
+            timestamp: timestamp
+            traceId: traceId
+          source: message
+      - labels:
+          level:
+          logger:
+      - timestamp:
+          source: timestamp
+          format: RFC3339Nano
+          fallback_formats:
+            - "2006-01-02T15:04:05.000Z07:00"

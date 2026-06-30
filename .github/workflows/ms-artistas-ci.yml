@@ -1,0 +1,244 @@
+name: MS-Artistas CI/CD
+
+# ─────────────────────────────────────────────────────────────────────────
+# Pipeline de Integración y Entrega Continua para el microservicio
+# ms-artistas. Etapas: Build -> Test + Cobertura -> Quality Gate -> Docker
+# ─────────────────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "ms-artistas/**"
+      - ".github/workflows/ms-artistas-ci.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "ms-artistas/**"
+      - ".github/workflows/ms-artistas-ci.yml"
+  workflow_dispatch: {}
+
+env:
+  JAVA_VERSION: "21"
+  WORKDIR: ms-artistas/artistas
+  IMAGE_NAME: ${{ github.repository_owner }}/ms-artistas
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  # ───────────────────────────────────────────────────────────────────────
+  # 1) BUILD: compila el proyecto y valida que el código compile
+  # ───────────────────────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # necesario para el análisis de SonarCloud (blame info)
+
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: "temurin"
+          cache: "maven"
+
+      - name: Dar permisos a Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Compilar proyecto
+        run: ./mvnw -B clean compile
+
+  # ───────────────────────────────────────────────────────────────────────
+  # 2) TEST: ejecuta los tests unitarios y genera el reporte de cobertura
+  #    con JaCoCo
+  # ───────────────────────────────────────────────────────────────────────
+  test:
+    name: Tests + Cobertura (JaCoCo)
+    runs-on: ubuntu-latest
+    needs: build
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    # MySQL real (no H2): ArtistasApplicationTests usa @SpringBootTest y
+    # Flyway corre las migraciones reales al levantar el contexto, igual
+    # que en docker-compose.yml (misma imagen y credenciales).
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: db_artistas
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_EVENTOS_URL: http://localhost:8081
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: "temurin"
+          cache: "maven"
+
+      - name: Dar permisos a Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Ejecutar tests con cobertura
+        run: ./mvnw -B test jacoco:report
+
+      - name: Publicar resultados de tests
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Resultados Tests ms-artistas
+          path: "${{ env.WORKDIR }}/target/surefire-reports/*.xml"
+          reporter: java-junit
+          fail-on-error: false
+
+      - name: Subir reporte de cobertura JaCoCo
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report-ms-artistas
+          path: ${{ env.WORKDIR }}/target/site/jacoco/
+          retention-days: 14
+
+      - name: Comentar cobertura en el Pull Request
+        if: github.event_name == 'pull_request'
+        uses: madrapps/jacoco-report@v1.7
+        with:
+          paths: ${{ github.workspace }}/${{ env.WORKDIR }}/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 60
+          min-coverage-changed-files: 60
+          title: "📊 Cobertura de código — ms-artistas"
+          update-comment: true
+
+  # ───────────────────────────────────────────────────────────────────────
+  # 3) QUALITY GATE: análisis estático de código con SonarCloud
+  #    (calidad, vulnerabilidades, code smells, duplicación y cobertura)
+  # ───────────────────────────────────────────────────────────────────────
+  quality-gate:
+    name: SonarCloud Quality Gate
+    runs-on: ubuntu-latest
+    needs: test
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    # mvn verify vuelve a ejecutar los tests (y jacoco:check), por lo que
+    # también necesita una base de datos real disponible.
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: db_artistas
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MS_EVENTOS_URL: http://localhost:8081
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: "temurin"
+          cache: "maven"
+
+      - name: Dar permisos a Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Cachear paquetes de SonarCloud
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Tests + Análisis SonarCloud
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY || 'DevVivas_ticket-system-ms-artistas' }} \
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION || 'devvivas' }} \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+
+      - name: Verificar resultado del Quality Gate
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # ───────────────────────────────────────────────────────────────────────
+  # 4) DOCKER: construye (y opcionalmente publica) la imagen del servicio
+  #    Solo se ejecuta tras pasar el Quality Gate, y solo en main
+  # ───────────────────────────────────────────────────────────────────────
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: quality-gate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login en Docker Hub
+        if: ${{ vars.DOCKERHUB_USERNAME != '' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & Push imagen Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: ms-artistas/artistas
+          file: ms-artistas/artistas/Dockerfile
+          push: ${{ vars.DOCKERHUB_USERNAME != '' }}
+          tags: |
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

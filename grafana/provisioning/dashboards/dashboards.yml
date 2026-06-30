@@ -1,0 +1,17 @@
+# ─────────────────────────────────────────────────────────────────────────
+# Aprovisionamiento automático de dashboards en Grafana
+# Carga cualquier .json colocado en /var/lib/grafana/dashboards/ms-artistas
+# ─────────────────────────────────────────────────────────────────────────
+apiVersion: 1
+
+providers:
+  - name: "ms-artistas"
+    orgId: 1
+    folder: "Ticket System"
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/ms-artistas
+      foldersFromFilesStructure: false
