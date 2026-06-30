@@ -1,0 +1,58 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'ms-eventos'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-eventos:8081']
+
+  - job_name: 'ms-recintos'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-recintos:8082']
+
+  - job_name: 'ms-tickets'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-tickets:8083']
+
+  - job_name: 'ms-ventas'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-ventas:8084']
+
+  - job_name: 'ms-validacion'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-validacion:8085']
+
+  - job_name: 'ms-artistas'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-artistas:8086']
+
+  - job_name: 'ms-preventa'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-preventa:8087']
+
+  - job_name: 'ms-devoluciones'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-devoluciones:8088']
+
+  - job_name: 'ms-promotores'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-promotores:8089']
+
+  - job_name: 'ms-streaming'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-streaming:8090']
+
+  - job_name: 'ms-auth'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-auth:8091']
