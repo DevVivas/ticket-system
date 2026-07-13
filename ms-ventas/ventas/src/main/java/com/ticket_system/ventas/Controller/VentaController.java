@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ticket_system.ventas.Assembler.VentaAssembler;
 import com.ticket_system.ventas.DTO.VentaDTO;
 import com.ticket_system.ventas.Model.Venta;
 import com.ticket_system.ventas.Service.VentaService;
@@ -31,25 +34,32 @@ public class VentaController {
     @Autowired
     private VentaService ventaService;
 
+    @Autowired
+    private VentaAssembler ventaAssembler;
+
     @GetMapping
-    public ResponseEntity<List<Venta>> getAll() {
+    public ResponseEntity<CollectionModel<EntityModel<Venta>>> getAll() {
         logger.info("GET /api/ventas");
-        return ResponseEntity.ok(ventaService.obtenerTodos());
+        List<Venta> ventas = ventaService.obtenerTodos();
+        return ResponseEntity.ok(ventaAssembler.toCollectionModel(ventas));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Venta> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(ventaService.obtenerPorId(id));
+    public ResponseEntity<EntityModel<Venta>> getById(@PathVariable Long id) {
+        Venta venta = ventaService.obtenerPorId(id);
+        return ResponseEntity.ok(ventaAssembler.toModel(venta));
     }
 
     @GetMapping("/comprador/{compradorId}")
-    public ResponseEntity<List<Venta>> getByComprador(@PathVariable Long compradorId) {
-        return ResponseEntity.ok(ventaService.obtenerPorComprador(compradorId));
+    public ResponseEntity<CollectionModel<EntityModel<Venta>>> getByComprador(@PathVariable Long compradorId) {
+        List<Venta> ventas = ventaService.obtenerPorComprador(compradorId);
+        return ResponseEntity.ok(ventaAssembler.toCollectionModel(ventas));
     }
 
     @GetMapping("/evento/{eventoId}")
-    public ResponseEntity<List<Venta>> getByEvento(@PathVariable Long eventoId) {
-        return ResponseEntity.ok(ventaService.obtenerPorEvento(eventoId));
+    public ResponseEntity<CollectionModel<EntityModel<Venta>>> getByEvento(@PathVariable Long eventoId) {
+        List<Venta> ventas = ventaService.obtenerPorEvento(eventoId);
+        return ResponseEntity.ok(ventaAssembler.toCollectionModel(ventas));
     }
 
     @PostMapping

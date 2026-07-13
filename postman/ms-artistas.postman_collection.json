@@ -1,0 +1,240 @@
+{
+  "info": {
+    "name": "ms-artistas",
+    "description": "Coleccion de endpoints del microservicio ms-artistas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/artistas",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/artistas/activos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/activos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "activos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/artistas/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/artistas/genero/:genero",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/genero/ROCK",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "genero", "ROCK"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/artistas",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Metallica\",\n  \"genero\": \"ROCK\",\n  \"nacionalidad\": \"Estadounidense\",\n  \"biografia\": \"Banda de heavy metal formada en 1981\",\n  \"imagenUrl\": \"https://example.com/metallica.jpg\",\n  \"sitioWeb\": \"https://www.metallica.com\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT /api/artistas/:id",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Metallica Updated\",\n  \"genero\": \"HEAVY_METAL\",\n  \"nacionalidad\": \"Estadounidense\",\n  \"biografia\": \"Banda de heavy metal formada en 1981 en Los Angeles\",\n  \"imagenUrl\": \"https://example.com/metallica-new.jpg\",\n  \"sitioWeb\": \"https://www.metallica.com\"\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE /api/artistas/:id",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/artistas/:id/agenda",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/1/agenda",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "1", "agenda"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/artistas/:id/agenda",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/1/agenda",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "1", "agenda"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"eventoId\": 1,\n  \"nombreEvento\": \"Concierto Rock\",\n  \"fechaPresentacion\": \"2026-08-15T20:00:00\",\n  \"lugar\": \"Estadio Nacional\",\n  \"notas\": \"Ensayo general a las 16:00\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/artistas/agenda/:agendaId/confirmar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/agenda/1/confirmar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "agenda", "1", "confirmar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PATCH /api/artistas/agenda/:agendaId/cancelar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/artistas/agenda/1/cancelar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "artistas", "agenda", "1", "cancelar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

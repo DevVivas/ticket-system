@@ -1,0 +1,141 @@
+{
+  "info": {
+    "name": "ms-eventos",
+    "description": "Coleccion de endpoints del microservicio ms-eventos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/eventos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/eventos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "eventos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/eventos/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/eventos/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "eventos", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/eventos",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/eventos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "eventos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Concierto Rock\",\n  \"tipo\": \"CONCIERTO\",\n  \"fechaEvento\": \"2026-08-15T20:00:00\",\n  \"lugar\": \"Estadio Nacional\",\n  \"capacidadTotal\": 50000,\n  \"descripcion\": \"Gran concierto de rock internacional\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT /api/eventos/:id",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/api/eventos/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "eventos", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Concierto Rock Actualizado\",\n  \"tipo\": \"CONCIERTO\",\n  \"fechaEvento\": \"2026-08-20T20:00:00\",\n  \"lugar\": \"Estadio Nacional\",\n  \"capacidadTotal\": 60000,\n  \"descripcion\": \"Gran concierto de rock internacional - Edicion especial\"\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE /api/eventos/:id",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/eventos/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "eventos", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PATCH /api/eventos/:id/cancelar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/eventos/1/cancelar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "eventos", "1", "cancelar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-package test.java.com.ticket_system.devoluciones;
+package com.ticket_system.devoluciones;
 
 import com.ticket_system.DTO.DevolucionDTO;
 import com.ticket_system.Exception.BusinessException;
@@ -62,8 +62,6 @@ class DevolucionServiceTest {
         devolucionDTO.setTipoDevolucion("EVENTO_CANCELADO");
     }
 
-    // ─── TEST: obtenerPorId ───────────────────────────────────────────────────
-
     @Test
     void obtenerPorId_cuandoExiste_debeRetornarDevolucion() {
         when(devolucionRepository.findById(1L)).thenReturn(Optional.of(devolucion));
@@ -82,8 +80,6 @@ class DevolucionServiceTest {
         assertThrows(ResourceNotFoundException.class,
             () -> devolucionService.obtenerPorId(99L));
     }
-
-    // ─── TEST: aprobar ────────────────────────────────────────────────────────
 
     @Test
     void aprobar_cuandoEstaPendiente_debeAprobar() {
@@ -107,8 +103,6 @@ class DevolucionServiceTest {
         verify(devolucionRepository, never()).save(any());
     }
 
-    // ─── TEST: rechazar ───────────────────────────────────────────────────────
-
     @Test
     void rechazar_cuandoEstaPendiente_debeRechazar() {
         when(devolucionRepository.findById(1L)).thenReturn(Optional.of(devolucion));
@@ -130,8 +124,6 @@ class DevolucionServiceTest {
 
         verify(devolucionRepository, never()).save(any());
     }
-
-    // ─── TEST: listarTodas ────────────────────────────────────────────────────
 
     @Test
     void listarTodas_debeRetornarTodasLasDevoluciones() {

@@ -1,5 +1,6 @@
 package com.ticketsystem.eventos.Controller;
 
+import com.ticketsystem.eventos.Assembler.EventoAssembler;
 import com.ticketsystem.eventos.DTO.EventoDTO;
 import com.ticketsystem.eventos.Model.Evento;
 import com.ticketsystem.eventos.Service.EventoService;
@@ -7,10 +8,13 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/eventos")
@@ -21,15 +25,22 @@ public class EventoController {
     @Autowired
     private EventoService eventoService;
 
+    @Autowired
+    private EventoAssembler eventoAssembler;
+
     @GetMapping
-    public ResponseEntity<List<Evento>> getAll() {
+    public ResponseEntity<CollectionModel<EntityModel<Evento>>> getAll() {
         logger.info("GET /api/eventos");
-        return ResponseEntity.ok(eventoService.obtenerTodos());
+        List<EntityModel<Evento>> eventos = eventoService.obtenerTodos().stream()
+                .map(eventoAssembler::toModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(eventos));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Evento> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(eventoService.obtenerPorId(id));
+    public ResponseEntity<EntityModel<Evento>> getById(@PathVariable Long id) {
+        Evento evento = eventoService.obtenerPorId(id);
+        return ResponseEntity.ok(eventoAssembler.toModel(evento));
     }
 
     @PostMapping

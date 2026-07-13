@@ -1,10 +1,13 @@
 package com.ticket_system.tickets.Controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ticket_system.tickets.Assembler.TicketAssembler;
 import com.ticket_system.tickets.DTO.TicketDTO;
 import com.ticket_system.tickets.Model.Ticket;
 import com.ticket_system.tickets.Service.TicketService;
@@ -31,30 +35,44 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
+    @Autowired
+    private TicketAssembler ticketAssembler;
+
     @GetMapping
-    public ResponseEntity<List<Ticket>> getAll() {
+    public ResponseEntity<CollectionModel<EntityModel<Ticket>>> getAll() {
         logger.info("GET /api/tickets");
-        return ResponseEntity.ok(ticketService.obtenerTodos());
+        List<EntityModel<Ticket>> tickets = ticketService.obtenerTodos().stream()
+                .map(ticketAssembler::toModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(tickets));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(ticketService.obtenerPorId(id));
+    public ResponseEntity<EntityModel<Ticket>> getById(@PathVariable Long id) {
+        Ticket ticket = ticketService.obtenerPorId(id);
+        return ResponseEntity.ok(ticketAssembler.toModel(ticket));
     }
 
     @GetMapping("/codigo/{codigo}")
-    public ResponseEntity<Ticket> getByCodigo(@PathVariable String codigo) {
-        return ResponseEntity.ok(ticketService.obtenerPorCodigo(codigo));
+    public ResponseEntity<EntityModel<Ticket>> getByCodigo(@PathVariable String codigo) {
+        Ticket ticket = ticketService.obtenerPorCodigo(codigo);
+        return ResponseEntity.ok(ticketAssembler.toModel(ticket));
     }
 
     @GetMapping("/evento/{eventoId}")
-    public ResponseEntity<List<Ticket>> getByEvento(@PathVariable Long eventoId) {
-        return ResponseEntity.ok(ticketService.obtenerPorEvento(eventoId));
+    public ResponseEntity<CollectionModel<EntityModel<Ticket>>> getByEvento(@PathVariable Long eventoId) {
+        List<EntityModel<Ticket>> tickets = ticketService.obtenerPorEvento(eventoId).stream()
+                .map(ticketAssembler::toModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(tickets));
     }
 
     @GetMapping("/comprador/{compradorId}")
-    public ResponseEntity<List<Ticket>> getByComprador(@PathVariable Long compradorId) {
-        return ResponseEntity.ok(ticketService.obtenerPorComprador(compradorId));
+    public ResponseEntity<CollectionModel<EntityModel<Ticket>>> getByComprador(@PathVariable Long compradorId) {
+        List<EntityModel<Ticket>> tickets = ticketService.obtenerPorComprador(compradorId).stream()
+                .map(ticketAssembler::toModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(tickets));
     }
 
     @PostMapping

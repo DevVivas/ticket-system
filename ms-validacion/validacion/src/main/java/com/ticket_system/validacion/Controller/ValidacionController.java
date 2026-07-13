@@ -1,5 +1,7 @@
 package com.ticket_system.validacion.Controller;
 
+import com.ticket_system.validacion.Assembler.SesionValidacionAssembler;
+import com.ticket_system.validacion.Assembler.ValidacionTicketAssembler;
 import com.ticket_system.validacion.DTO.SesionDTO;
 import com.ticket_system.validacion.DTO.ValidacionDTO;
 import com.ticket_system.validacion.Model.SesionValidacion;
@@ -9,6 +11,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,46 +27,45 @@ public class ValidacionController {
     @Autowired
     private ValidacionService validacionService;
 
-    // ─── ENDPOINTS SESIONES ───────────────────────────────────────────────────
+    @Autowired
+    private SesionValidacionAssembler sesionValidacionAssembler;
 
-    // GET /api/validacion/sesiones
+    @Autowired
+    private ValidacionTicketAssembler validacionTicketAssembler;
+
     @GetMapping("/sesiones")
-    public ResponseEntity<List<SesionValidacion>> listarSesiones() {
+    public ResponseEntity<CollectionModel<EntityModel<SesionValidacion>>> listarSesiones() {
         logger.info("[VALIDACION] GET /api/validacion/sesiones");
-        return ResponseEntity.ok(validacionService.listarSesiones());
+        List<SesionValidacion> sesiones = validacionService.listarSesiones();
+        return ResponseEntity.ok(sesionValidacionAssembler.toCollectionModel(sesiones));
     }
 
-    // GET /api/validacion/sesiones/{id}
     @GetMapping("/sesiones/{id}")
-    public ResponseEntity<SesionValidacion> obtenerSesion(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<SesionValidacion>> obtenerSesion(@PathVariable Long id) {
         logger.info("[VALIDACION] GET /api/validacion/sesiones/{}", id);
-        return ResponseEntity.ok(validacionService.obtenerSesionPorId(id));
+        SesionValidacion sesion = validacionService.obtenerSesionPorId(id);
+        return ResponseEntity.ok(sesionValidacionAssembler.toModel(sesion));
     }
 
-    // GET /api/validacion/sesiones/evento/{eventoId}
     @GetMapping("/sesiones/evento/{eventoId}")
-    public ResponseEntity<List<SesionValidacion>> listarPorEvento(@PathVariable Long eventoId) {
+    public ResponseEntity<CollectionModel<EntityModel<SesionValidacion>>> listarPorEvento(@PathVariable Long eventoId) {
         logger.info("[VALIDACION] GET /api/validacion/sesiones/evento/{}", eventoId);
-        return ResponseEntity.ok(validacionService.listarSesionesPorEvento(eventoId));
+        List<SesionValidacion> sesiones = validacionService.listarSesionesPorEvento(eventoId);
+        return ResponseEntity.ok(sesionValidacionAssembler.toCollectionModel(sesiones));
     }
 
-    // POST /api/validacion/sesiones
     @PostMapping("/sesiones")
     public ResponseEntity<SesionValidacion> abrirSesion(@Valid @RequestBody SesionDTO dto) {
         logger.info("[VALIDACION] POST /api/validacion/sesiones - portero: {}", dto.getNombrePortero());
         return ResponseEntity.status(HttpStatus.CREATED).body(validacionService.abrirSesion(dto));
     }
 
-    // PATCH /api/validacion/sesiones/{id}/cerrar
     @PatchMapping("/sesiones/{id}/cerrar")
     public ResponseEntity<SesionValidacion> cerrarSesion(@PathVariable Long id) {
         logger.info("[VALIDACION] PATCH /api/validacion/sesiones/{}/cerrar", id);
         return ResponseEntity.ok(validacionService.cerrarSesion(id));
     }
 
-    // ─── ENDPOINTS ESCANEO ────────────────────────────────────────────────────
-
-    // POST /api/validacion/sesiones/{id}/escanear
     @PostMapping("/sesiones/{id}/escanear")
     public ResponseEntity<ValidacionTicket> escanear(@PathVariable Long id,
                                                       @Valid @RequestBody ValidacionDTO dto) {
@@ -70,17 +73,17 @@ public class ValidacionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(validacionService.escanearTicket(id, dto));
     }
 
-    // GET /api/validacion/sesiones/{id}/validaciones
     @GetMapping("/sesiones/{id}/validaciones")
-    public ResponseEntity<List<ValidacionTicket>> obtenerValidaciones(@PathVariable Long id) {
+    public ResponseEntity<CollectionModel<EntityModel<ValidacionTicket>>> obtenerValidaciones(@PathVariable Long id) {
         logger.info("[VALIDACION] GET /api/validacion/sesiones/{}/validaciones", id);
-        return ResponseEntity.ok(validacionService.obtenerValidacionesPorSesion(id));
+        List<ValidacionTicket> validaciones = validacionService.obtenerValidacionesPorSesion(id);
+        return ResponseEntity.ok(validacionTicketAssembler.toCollectionModel(validaciones));
     }
 
-    // GET /api/validacion/resultado/{resultado}
     @GetMapping("/resultado/{resultado}")
-    public ResponseEntity<List<ValidacionTicket>> listarPorResultado(@PathVariable String resultado) {
+    public ResponseEntity<CollectionModel<EntityModel<ValidacionTicket>>> listarPorResultado(@PathVariable String resultado) {
         logger.info("[VALIDACION] GET /api/validacion/resultado/{}", resultado);
-        return ResponseEntity.ok(validacionService.listarPorResultado(resultado));
+        List<ValidacionTicket> validaciones = validacionService.listarPorResultado(resultado);
+        return ResponseEntity.ok(validacionTicketAssembler.toCollectionModel(validaciones));
     }
 }

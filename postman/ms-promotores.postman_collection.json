@@ -1,0 +1,240 @@
+{
+  "info": {
+    "name": "ms-promotores",
+    "description": "Coleccion de endpoints del microservicio ms-promotores",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/promotores",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/promotores/activos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/activos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "activos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/promotores/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/promotores",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Promotor Events SA\",\n  \"email\": \"contacto@eventssa.com\",\n  \"telefono\": \"+56912345678\",\n  \"porcentajeComision\": 10.5\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT /api/promotores/:id",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Promotor Events SA Actualizado\",\n  \"email\": \"nuevo-contacto@eventssa.com\",\n  \"telefono\": \"+56987654321\",\n  \"porcentajeComision\": 12.0\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE /api/promotores/:id",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/promotores/:id/comisiones",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/1/comisiones",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "1", "comisiones"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/promotores/:id/comisiones/pendiente",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/1/comisiones/pendiente",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "1", "comisiones", "pendiente"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/promotores/:id/comisiones",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/1/comisiones",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "1", "comisiones"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ventaId\": 1,\n  \"montoVenta\": 100000.0\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/promotores/comisiones/:comisionId/pagar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/comisiones/1/pagar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "comisiones", "1", "pagar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PATCH /api/promotores/comisiones/:comisionId/anular",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/promotores/comisiones/1/anular",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "promotores", "comisiones", "1", "anular"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

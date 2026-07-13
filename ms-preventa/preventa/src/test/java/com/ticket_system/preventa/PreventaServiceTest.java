@@ -1,4 +1,4 @@
-package test.java.com.ticket_system.preventa;
+package com.ticket_system.preventa;
 
 import com.ticket_system.preventa.DTO.CodigoBeneficioDTO;
 import com.ticket_system.preventa.Exception.BusinessException;

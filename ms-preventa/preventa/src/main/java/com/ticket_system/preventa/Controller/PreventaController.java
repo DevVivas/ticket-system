@@ -6,6 +6,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,11 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ticket_system.preventa.Assembler.CodigoBeneficioAssembler;
 import com.ticket_system.preventa.DTO.CodigoBeneficioDTO;
 import com.ticket_system.preventa.Model.CodigoBeneficio;
 import com.ticket_system.preventa.Service.PreventaService;
 
 import jakarta.validation.Valid;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/preventa")
@@ -34,23 +40,26 @@ public class PreventaController {
     @Autowired
     private PreventaService preventaService;
 
-    // GET /api/preventa
+    @Autowired
+    private CodigoBeneficioAssembler assembler;
+
     @GetMapping
-    public ResponseEntity<List<CodigoBeneficio>> getAll() {
+    public ResponseEntity<CollectionModel<EntityModel<CodigoBeneficio>>> getAll() {
         logger.info("[PREVENTA] GET /api/preventa");
-        return ResponseEntity.ok(preventaService.obtenerTodos());
+        List<CodigoBeneficio> codigos = preventaService.obtenerTodos();
+        CollectionModel<EntityModel<CodigoBeneficio>> model = assembler.toCollectionModel(codigos);
+        model.add(linkTo(methodOn(PreventaController.class).getAll()).withSelfRel());
+        return ResponseEntity.ok(model);
     }
 
-    // GET /api/preventa/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<CodigoBeneficio> getById(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<CodigoBeneficio>> getById(@PathVariable Long id) {
         logger.info("[PREVENTA] GET /api/preventa/{}", id);
         return preventaService.obtenerPorId(id)
-            .map(ResponseEntity::ok)
+            .map(codigo -> ResponseEntity.ok(assembler.toModel(codigo)))
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST /api/preventa
     @PostMapping
     public ResponseEntity<CodigoBeneficio> create(@Valid @RequestBody CodigoBeneficioDTO dto) {
         logger.info("[PREVENTA] POST /api/preventa");
@@ -58,7 +67,6 @@ public class PreventaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
-    // PUT /api/preventa/{id}
     @PutMapping("/{id}")
     public ResponseEntity<CodigoBeneficio> update(@PathVariable Long id,
                                                    @Valid @RequestBody CodigoBeneficioDTO dto) {
@@ -70,7 +78,6 @@ public class PreventaController {
         }
     }
 
-    // DELETE /api/preventa/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         logger.info("[PREVENTA] DELETE /api/preventa/{}", id);
@@ -82,7 +89,6 @@ public class PreventaController {
         }
     }
 
-    // POST /api/preventa/validar
     @PostMapping("/validar")
     public ResponseEntity<Map<String, Object>> validar(@RequestParam String codigo) {
         logger.info("[PREVENTA] POST /api/preventa/validar - codigo: {}", codigo);
@@ -93,7 +99,6 @@ public class PreventaController {
         }
     }
 
-    // PATCH /api/preventa/{id}/desactivar
     @PatchMapping("/{id}/desactivar")
     public ResponseEntity<CodigoBeneficio> desactivar(@PathVariable Long id) {
         logger.info("[PREVENTA] PATCH /api/preventa/{}/desactivar", id);
@@ -104,10 +109,12 @@ public class PreventaController {
         }
     }
 
-    // GET /api/preventa/evento/{eventoId}
     @GetMapping("/evento/{eventoId}")
-    public ResponseEntity<List<CodigoBeneficio>> getByEvento(@PathVariable Long eventoId) {
+    public ResponseEntity<CollectionModel<EntityModel<CodigoBeneficio>>> getByEvento(@PathVariable Long eventoId) {
         logger.info("[PREVENTA] GET /api/preventa/evento/{}", eventoId);
-        return ResponseEntity.ok(preventaService.obtenerPorEvento(eventoId));
+        List<CodigoBeneficio> codigos = preventaService.obtenerPorEvento(eventoId);
+        CollectionModel<EntityModel<CodigoBeneficio>> model = assembler.toCollectionModel(codigos);
+        model.add(linkTo(methodOn(PreventaController.class).getByEvento(eventoId)).withSelfRel());
+        return ResponseEntity.ok(model);
     }
 }

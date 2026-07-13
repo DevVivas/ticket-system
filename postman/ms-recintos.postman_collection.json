@@ -1,0 +1,186 @@
+{
+  "info": {
+    "name": "ms-recintos",
+    "description": "Coleccion de endpoints del microservicio ms-recintos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/recintos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/recintos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recintos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/recintos/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/recintos/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recintos", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/recintos",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/recintos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recintos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Movistar Arena\",\n  \"direccion\": \"Av. Américo Vespucio 1700\",\n  \"capacidadMaxima\": 15000\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT /api/recintos/:id",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/api/recintos/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recintos", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Movistar Arena Actualizado\",\n  \"direccion\": \"Av. Américo Vespucio 1700, Santiago\",\n  \"capacidadMaxima\": 16000\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE /api/recintos/:id",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/recintos/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recintos", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/recintos/:id/sectores",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/recintos/1/sectores",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recintos", "1", "sectores"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Sector VIP\",\n  \"capacidad\": 500,\n  \"precioBase\": 150000.0\n}"
+        }
+      }
+    },
+    {
+      "name": "GET /api/recintos/:id/sectores",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/recintos/1/sectores",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recintos", "1", "sectores"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DELETE /api/recintos/sectores/:sectorId",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/recintos/sectores/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "recintos", "sectores", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

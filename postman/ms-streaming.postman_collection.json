@@ -1,0 +1,258 @@
+{
+  "info": {
+    "name": "ms-streaming",
+    "description": "Coleccion de endpoints del microservicio ms-streaming",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/streamings",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/streamings/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/streamings/estado/:estado",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/estado/EN_VIVO",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "estado", "EN_VIVO"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/streamings",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"eventoId\": 1,\n  \"nombreStream\": \"Concierto Rock en Vivo\",\n  \"urlStream\": \"https://stream.example.com/concierto-rock\",\n  \"fechaInicio\": \"2026-08-15T20:00:00\",\n  \"fechaFin\": \"2026-08-15T23:59:00\",\n  \"capacidadMaxima\": 10000,\n  \"descripcion\": \"Transmision en vivo del concierto de rock\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT /api/streamings/:id",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"eventoId\": 1,\n  \"nombreStream\": \"Concierto Rock en Vivo HD\",\n  \"urlStream\": \"https://stream.example.com/concierto-rock-hd\",\n  \"fechaInicio\": \"2026-08-15T20:00:00\",\n  \"fechaFin\": \"2026-08-16T00:00:00\",\n  \"capacidadMaxima\": 15000,\n  \"descripcion\": \"Transmision en vivo HD del concierto de rock\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/streamings/:id/iniciar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/1/iniciar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "1", "iniciar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PATCH /api/streamings/:id/finalizar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/1/finalizar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "1", "finalizar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PATCH /api/streamings/:id/cancelar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/1/cancelar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "1", "cancelar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/streamings/:id/accesos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/1/accesos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "1", "accesos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/streamings/:id/accesos",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/1/accesos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "1", "accesos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ticketId\": 1,\n  \"nombreEspectador\": \"Juan Perez\",\n  \"emailEspectador\": \"juan@example.com\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/streamings/accesos/validar/:codigo",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/accesos/validar/STR-ABC123",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "accesos", "validar", "STR-ABC123"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PATCH /api/streamings/accesos/:accesoId/revocar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/streamings/accesos/1/revocar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "streamings", "accesos", "1", "revocar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

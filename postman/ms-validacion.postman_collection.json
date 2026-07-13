@@ -1,0 +1,177 @@
+{
+  "info": {
+    "name": "ms-validacion",
+    "description": "Coleccion de endpoints del microservicio ms-validacion",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/validacion/sesiones",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/validacion/sesiones",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "validacion", "sesiones"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/validacion/sesiones/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/validacion/sesiones/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "validacion", "sesiones", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/validacion/sesiones/evento/:eventoId",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/validacion/sesiones/evento/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "validacion", "sesiones", "evento", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/validacion/sesiones",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/validacion/sesiones",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "validacion", "sesiones"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"eventoId\": 1,\n  \"nombrePortero\": \"Carlos Perez\",\n  \"puestoAcceso\": \"Puerta Principal\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/validacion/sesiones/:id/cerrar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/validacion/sesiones/1/cerrar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "validacion", "sesiones", "1", "cerrar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/validacion/sesiones/:id/escanear",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/validacion/sesiones/1/escanear",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "validacion", "sesiones", "1", "escanear"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoQR\": \"QR-TKT-ABC123\",\n  \"ticketId\": 1\n}"
+        }
+      }
+    },
+    {
+      "name": "GET /api/validacion/sesiones/:id/validaciones",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/validacion/sesiones/1/validaciones",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "validacion", "sesiones", "1", "validaciones"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/validacion/resultado/:resultado",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/validacion/resultado/VALIDO",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "validacion", "resultado", "VALIDO"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

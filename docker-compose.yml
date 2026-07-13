@@ -290,6 +290,7 @@ services:
       MS_DEVOLUCIONES_URL: http://ms-devoluciones:8088
       MS_PROMOTORES_URL: http://ms-promotores:8089
       MS_STREAMING_URL: http://ms-streaming:8090
+      JWT_SECRET: claveSecretaSuperSeguraParaTicketSystem2026QueDebeTenerAlMenos256Bits
     ports:
       - "8080:8080"
     networks:

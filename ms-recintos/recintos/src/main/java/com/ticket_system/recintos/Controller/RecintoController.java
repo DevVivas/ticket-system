@@ -1,10 +1,13 @@
 package com.ticket_system.recintos.Controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ticket_system.recintos.Assembler.RecintoAssembler;
+import com.ticket_system.recintos.Assembler.SectorAssembler;
 import com.ticket_system.recintos.DTO.RecintoDTO;
 import com.ticket_system.recintos.DTO.SectorDTO;
 import com.ticket_system.recintos.Model.Recinto;
@@ -33,15 +38,25 @@ public class RecintoController {
     @Autowired
     private RecintoService recintoService;
 
+    @Autowired
+    private RecintoAssembler recintoAssembler;
+
+    @Autowired
+    private SectorAssembler sectorAssembler;
+
     @GetMapping
-    public ResponseEntity<List<Recinto>> getAll() {
+    public ResponseEntity<CollectionModel<EntityModel<Recinto>>> getAll() {
         logger.info("GET /api/recintos");
-        return ResponseEntity.ok(recintoService.obtenerTodos());
+        List<EntityModel<Recinto>> recintos = recintoService.obtenerTodos().stream()
+                .map(recintoAssembler::toModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(recintos));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recinto> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(recintoService.obtenerPorId(id));
+    public ResponseEntity<EntityModel<Recinto>> getById(@PathVariable Long id) {
+        Recinto recinto = recintoService.obtenerPorId(id);
+        return ResponseEntity.ok(recintoAssembler.toModel(recinto));
     }
 
     @PostMapping
@@ -83,9 +98,12 @@ public class RecintoController {
     }
 
     @GetMapping("/{id}/sectores")
-    public ResponseEntity<List<Sector>> getSectores(@PathVariable Long id) {
+    public ResponseEntity<CollectionModel<EntityModel<Sector>>> getSectores(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(recintoService.obtenerSectores(id));
+            List<EntityModel<Sector>> sectores = recintoService.obtenerSectores(id).stream()
+                    .map(sectorAssembler::toModel)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(CollectionModel.of(sectores));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

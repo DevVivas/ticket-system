@@ -1,5 +1,7 @@
 package com.ticket_system.streaming.Controller;
 
+import com.ticket_system.streaming.Assembler.AccesoStreamingAssembler;
+import com.ticket_system.streaming.Assembler.StreamingAssembler;
 import com.ticket_system.streaming.DTO.AccesoDTO;
 import com.ticket_system.streaming.DTO.StreamingDTO;
 import com.ticket_system.streaming.Model.AccesoStreaming;
@@ -9,10 +11,15 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/streamings")
@@ -23,37 +30,43 @@ public class StreamingController {
     @Autowired
     private StreamingService streamingService;
 
-    // ─── ENDPOINTS STREAMING ──────────────────────────────────────────────────
+    @Autowired
+    private StreamingAssembler streamingAssembler;
 
-    // GET /api/streamings
+    @Autowired
+    private AccesoStreamingAssembler accesoAssembler;
+
     @GetMapping
-    public ResponseEntity<List<Streaming>> listarTodos() {
+    public ResponseEntity<CollectionModel<EntityModel<Streaming>>> listarTodos() {
         logger.info("[STREAMING] GET /api/streamings");
-        return ResponseEntity.ok(streamingService.listarTodos());
+        List<Streaming> streamings = streamingService.listarTodos();
+        CollectionModel<EntityModel<Streaming>> model = streamingAssembler.toCollectionModel(streamings);
+        model.add(linkTo(methodOn(StreamingController.class).listarTodos()).withSelfRel());
+        return ResponseEntity.ok(model);
     }
 
-    // GET /api/streamings/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<Streaming> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<Streaming>> obtenerPorId(@PathVariable Long id) {
         logger.info("[STREAMING] GET /api/streamings/{}", id);
-        return ResponseEntity.ok(streamingService.obtenerPorId(id));
+        Streaming streaming = streamingService.obtenerPorId(id);
+        return ResponseEntity.ok(streamingAssembler.toModel(streaming));
     }
 
-    // GET /api/streamings/estado/{estado}
     @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<Streaming>> listarPorEstado(@PathVariable String estado) {
+    public ResponseEntity<CollectionModel<EntityModel<Streaming>>> listarPorEstado(@PathVariable String estado) {
         logger.info("[STREAMING] GET /api/streamings/estado/{}", estado);
-        return ResponseEntity.ok(streamingService.listarPorEstado(estado));
+        List<Streaming> streamings = streamingService.listarPorEstado(estado);
+        CollectionModel<EntityModel<Streaming>> model = streamingAssembler.toCollectionModel(streamings);
+        model.add(linkTo(methodOn(StreamingController.class).listarPorEstado(estado)).withSelfRel());
+        return ResponseEntity.ok(model);
     }
 
-    // POST /api/streamings
     @PostMapping
     public ResponseEntity<Streaming> crear(@Valid @RequestBody StreamingDTO dto) {
         logger.info("[STREAMING] POST /api/streamings - eventoId: {}", dto.getEventoId());
         return ResponseEntity.status(HttpStatus.CREATED).body(streamingService.crear(dto));
     }
 
-    // PUT /api/streamings/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Streaming> actualizar(@PathVariable Long id,
                                                  @Valid @RequestBody StreamingDTO dto) {
@@ -61,37 +74,33 @@ public class StreamingController {
         return ResponseEntity.ok(streamingService.actualizar(id, dto));
     }
 
-    // PATCH /api/streamings/{id}/iniciar
     @PatchMapping("/{id}/iniciar")
     public ResponseEntity<Streaming> iniciar(@PathVariable Long id) {
         logger.info("[STREAMING] PATCH /api/streamings/{}/iniciar", id);
         return ResponseEntity.ok(streamingService.iniciarStream(id));
     }
 
-    // PATCH /api/streamings/{id}/finalizar
     @PatchMapping("/{id}/finalizar")
     public ResponseEntity<Streaming> finalizar(@PathVariable Long id) {
         logger.info("[STREAMING] PATCH /api/streamings/{}/finalizar", id);
         return ResponseEntity.ok(streamingService.finalizarStream(id));
     }
 
-    // PATCH /api/streamings/{id}/cancelar
     @PatchMapping("/{id}/cancelar")
     public ResponseEntity<Streaming> cancelar(@PathVariable Long id) {
         logger.info("[STREAMING] PATCH /api/streamings/{}/cancelar", id);
         return ResponseEntity.ok(streamingService.cancelarStream(id));
     }
 
-    // ─── ENDPOINTS ACCESOS ────────────────────────────────────────────────────
-
-    // GET /api/streamings/{id}/accesos
     @GetMapping("/{id}/accesos")
-    public ResponseEntity<List<AccesoStreaming>> obtenerAccesos(@PathVariable Long id) {
+    public ResponseEntity<CollectionModel<EntityModel<AccesoStreaming>>> obtenerAccesos(@PathVariable Long id) {
         logger.info("[STREAMING] GET /api/streamings/{}/accesos", id);
-        return ResponseEntity.ok(streamingService.obtenerAccesosPorStreaming(id));
+        List<AccesoStreaming> accesos = streamingService.obtenerAccesosPorStreaming(id);
+        CollectionModel<EntityModel<AccesoStreaming>> model = accesoAssembler.toCollectionModel(accesos);
+        model.add(linkTo(methodOn(StreamingController.class).obtenerAccesos(id)).withSelfRel());
+        return ResponseEntity.ok(model);
     }
 
-    // POST /api/streamings/{id}/accesos
     @PostMapping("/{id}/accesos")
     public ResponseEntity<AccesoStreaming> generarAcceso(@PathVariable Long id,
                                                           @Valid @RequestBody AccesoDTO dto) {
@@ -99,14 +108,12 @@ public class StreamingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(streamingService.generarAcceso(id, dto));
     }
 
-    // PATCH /api/streamings/accesos/validar/{codigo}
     @PatchMapping("/accesos/validar/{codigo}")
     public ResponseEntity<AccesoStreaming> validarAcceso(@PathVariable String codigo) {
         logger.info("[STREAMING] PATCH /api/streamings/accesos/validar/{}", codigo);
         return ResponseEntity.ok(streamingService.validarAcceso(codigo));
     }
 
-    // PATCH /api/streamings/accesos/{accesoId}/revocar
     @PatchMapping("/accesos/{accesoId}/revocar")
     public ResponseEntity<AccesoStreaming> revocarAcceso(@PathVariable Long accesoId) {
         logger.info("[STREAMING] PATCH /api/streamings/accesos/{}/revocar", accesoId);

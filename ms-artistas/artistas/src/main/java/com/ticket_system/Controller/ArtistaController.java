@@ -1,5 +1,7 @@
 package com.ticket_system.Controller;
 
+import com.ticket_system.Assembler.AgendaArtistaAssembler;
+import com.ticket_system.Assembler.ArtistaAssembler;
 import com.ticket_system.DTO.AgendaDTO;
 import com.ticket_system.DTO.ArtistaDTO;
 import com.ticket_system.Model.AgendaArtista;
@@ -9,6 +11,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,42 +27,46 @@ public class ArtistaController {
     @Autowired
     private ArtistaService artistaService;
 
-    // GET /api/artistas
+    @Autowired
+    private ArtistaAssembler artistaAssembler;
+
+    @Autowired
+    private AgendaArtistaAssembler agendaArtistaAssembler;
+
     @GetMapping
-    public ResponseEntity<List<Artista>> listarTodos() {
+    public ResponseEntity<CollectionModel<EntityModel<Artista>>> listarTodos() {
         logger.info("[ARTISTAS] GET /api/artistas");
-        return ResponseEntity.ok(artistaService.listarTodos());
+        List<Artista> artistas = artistaService.listarTodos();
+        return ResponseEntity.ok(artistaAssembler.toCollectionModel(artistas));
     }
 
-    // GET /api/artistas/activos
     @GetMapping("/activos")
-    public ResponseEntity<List<Artista>> listarActivos() {
+    public ResponseEntity<CollectionModel<EntityModel<Artista>>> listarActivos() {
         logger.info("[ARTISTAS] GET /api/artistas/activos");
-        return ResponseEntity.ok(artistaService.listarActivos());
+        List<Artista> artistas = artistaService.listarActivos();
+        return ResponseEntity.ok(artistaAssembler.toCollectionModel(artistas));
     }
 
-    // GET /api/artistas/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<Artista> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<Artista>> obtenerPorId(@PathVariable Long id) {
         logger.info("[ARTISTAS] GET /api/artistas/{}", id);
-        return ResponseEntity.ok(artistaService.obtenerPorId(id));
+        Artista artista = artistaService.obtenerPorId(id);
+        return ResponseEntity.ok(artistaAssembler.toModel(artista));
     }
 
-    // GET /api/artistas/genero/{genero}
     @GetMapping("/genero/{genero}")
-    public ResponseEntity<List<Artista>> listarPorGenero(@PathVariable String genero) {
+    public ResponseEntity<CollectionModel<EntityModel<Artista>>> listarPorGenero(@PathVariable String genero) {
         logger.info("[ARTISTAS] GET /api/artistas/genero/{}", genero);
-        return ResponseEntity.ok(artistaService.listarPorGenero(genero));
+        List<Artista> artistas = artistaService.listarPorGenero(genero);
+        return ResponseEntity.ok(artistaAssembler.toCollectionModel(artistas));
     }
 
-    // POST /api/artistas
     @PostMapping
     public ResponseEntity<Artista> crear(@Valid @RequestBody ArtistaDTO dto) {
         logger.info("[ARTISTAS] POST /api/artistas - nombre: {}", dto.getNombre());
         return ResponseEntity.status(HttpStatus.CREATED).body(artistaService.crear(dto));
     }
 
-    // PUT /api/artistas/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Artista> actualizar(@PathVariable Long id,
                                                @Valid @RequestBody ArtistaDTO dto) {
@@ -66,7 +74,6 @@ public class ArtistaController {
         return ResponseEntity.ok(artistaService.actualizar(id, dto));
     }
 
-    // DELETE /api/artistas/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         logger.info("[ARTISTAS] DELETE /api/artistas/{}", id);
@@ -74,14 +81,13 @@ public class ArtistaController {
         return ResponseEntity.noContent().build();
     }
 
-    // GET /api/artistas/{id}/agenda
     @GetMapping("/{id}/agenda")
-    public ResponseEntity<List<AgendaArtista>> obtenerAgenda(@PathVariable Long id) {
+    public ResponseEntity<CollectionModel<EntityModel<AgendaArtista>>> obtenerAgenda(@PathVariable Long id) {
         logger.info("[ARTISTAS] GET /api/artistas/{}/agenda", id);
-        return ResponseEntity.ok(artistaService.obtenerAgendaPorArtista(id));
+        List<AgendaArtista> agenda = artistaService.obtenerAgendaPorArtista(id);
+        return ResponseEntity.ok(agendaArtistaAssembler.toCollectionModel(agenda));
     }
 
-    // POST /api/artistas/{id}/agenda
     @PostMapping("/{id}/agenda")
     public ResponseEntity<AgendaArtista> agregarAgenda(@PathVariable Long id,
                                                         @Valid @RequestBody AgendaDTO dto) {
@@ -89,14 +95,12 @@ public class ArtistaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(artistaService.agregarAgenda(id, dto));
     }
 
-    // PATCH /api/artistas/agenda/{agendaId}/confirmar
     @PatchMapping("/agenda/{agendaId}/confirmar")
     public ResponseEntity<AgendaArtista> confirmarAgenda(@PathVariable Long agendaId) {
         logger.info("[ARTISTAS] PATCH confirmar agenda id: {}", agendaId);
         return ResponseEntity.ok(artistaService.confirmarAgenda(agendaId));
     }
 
-    // PATCH /api/artistas/agenda/{agendaId}/cancelar
     @PatchMapping("/agenda/{agendaId}/cancelar")
     public ResponseEntity<AgendaArtista> cancelarAgenda(@PathVariable Long agendaId) {
         logger.info("[ARTISTAS] PATCH cancelar agenda id: {}", agendaId);

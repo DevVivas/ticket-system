@@ -1,4 +1,4 @@
-package test.java.com.ticket_system.streaming;
+package com.ticket_system.streaming;
 
 import com.ticket_system.streaming.DTO.AccesoDTO;
 import com.ticket_system.streaming.DTO.StreamingDTO;

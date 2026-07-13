@@ -1,0 +1,150 @@
+{
+  "info": {
+    "name": "ms-ventas",
+    "description": "Coleccion de endpoints del microservicio ms-ventas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/ventas",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/ventas",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ventas"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/ventas/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/ventas/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ventas", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/ventas/comprador/:compradorId",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/ventas/comprador/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ventas", "comprador", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/ventas/evento/:eventoId",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/ventas/evento/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ventas", "evento", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/ventas",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/ventas",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ventas"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"compradorId\": 1,\n  \"eventoId\": 1,\n  \"metodoPago\": \"TARJETA_CREDITO\",\n  \"items\": [\n    {\n      \"ticketId\": 1,\n      \"precioUnitario\": 50000.0,\n      \"cantidad\": 2\n    }\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/ventas/:id/cancelar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/ventas/1/cancelar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ventas", "1", "cancelar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DELETE /api/ventas/:id",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/ventas/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ventas", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

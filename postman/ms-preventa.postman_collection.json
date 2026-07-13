@@ -1,0 +1,183 @@
+{
+  "info": {
+    "name": "ms-preventa",
+    "description": "Coleccion de endpoints del microservicio ms-preventa",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/preventa",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/preventa",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "preventa"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/preventa/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/preventa/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "preventa", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/preventa",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/preventa",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "preventa"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"EARLY20\",\n  \"tipo\": \"DESCUENTO\",\n  \"porcentajeDescuento\": 20.0,\n  \"usoMaximo\": 100,\n  \"fechaExpiracion\": \"2026-12-31T23:59:59\",\n  \"eventoId\": 1\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT /api/preventa/:id",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/api/preventa/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "preventa", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"EARLY25\",\n  \"tipo\": \"DESCUENTO\",\n  \"porcentajeDescuento\": 25.0,\n  \"usoMaximo\": 200,\n  \"fechaExpiracion\": \"2026-12-31T23:59:59\",\n  \"eventoId\": 1\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE /api/preventa/:id",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/preventa/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "preventa", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/preventa/validar?codigo=xxx",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/preventa/validar?codigo=EARLY20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "preventa", "validar"],
+          "query": [
+            {
+              "key": "codigo",
+              "value": "EARLY20"
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PATCH /api/preventa/:id/desactivar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/preventa/1/desactivar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "preventa", "1", "desactivar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/preventa/evento/:eventoId",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/preventa/evento/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "preventa", "evento", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

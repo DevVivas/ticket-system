@@ -1,0 +1,240 @@
+{
+  "info": {
+    "name": "ms-devoluciones",
+    "description": "Coleccion de endpoints del microservicio ms-devoluciones",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /api/devoluciones",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/devoluciones/:id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/devoluciones/estado/:estado",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/estado/PENDIENTE",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "estado", "PENDIENTE"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/devoluciones/venta/:ventaId",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/venta/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "venta", "1"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/devoluciones",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ventaId\": 1,\n  \"ticketId\": 1,\n  \"motivo\": \"Evento cancelado por el organizador\",\n  \"montoDevolucion\": 50000.0,\n  \"tipoDevolucion\": \"TOTAL\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/devoluciones/:id/aprobar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/1/aprobar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "1", "aprobar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PATCH /api/devoluciones/:id/rechazar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/1/rechazar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "1", "rechazar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"motivo\": \"No cumple con los terminos de devolucion\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/devoluciones/:id/completar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/1/completar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "1", "completar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/devoluciones/:id/reembolsos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/1/reembolsos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "1", "reembolsos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/devoluciones/:id/reembolsos",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/1/reembolsos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "1", "reembolsos"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"montoReembolso\": 50000.0,\n  \"metodoReembolso\": \"TRANSFERENCIA_BANCARIA\",\n  \"referenciaBancaria\": \"REF-12345678\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PATCH /api/devoluciones/reembolsos/:reembolsoId/procesar",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/devoluciones/reembolsos/1/procesar",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "devoluciones", "reembolsos", "1", "procesar"]
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}
