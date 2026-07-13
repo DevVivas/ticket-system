@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -32,11 +31,14 @@ public class TicketController {
 
     private static final Logger logger = LoggerFactory.getLogger(TicketController.class);
 
-    @Autowired
-    private TicketService ticketService;
+    private final TicketService ticketService;
 
-    @Autowired
-    private TicketAssembler ticketAssembler;
+    private final TicketAssembler ticketAssembler;
+
+    TicketController(TicketService ticketService, TicketAssembler ticketAssembler) {
+        this.ticketService = ticketService;
+        this.ticketAssembler = ticketAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Ticket>>> getAll() {

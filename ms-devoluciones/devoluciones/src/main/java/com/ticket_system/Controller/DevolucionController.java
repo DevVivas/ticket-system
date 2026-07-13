@@ -10,7 +10,6 @@ import com.ticket_system.Service.DevolucionService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -28,14 +27,17 @@ public class DevolucionController {
 
     private static final Logger logger = LoggerFactory.getLogger(DevolucionController.class);
 
-    @Autowired
-    private DevolucionService devolucionService;
+    private final DevolucionService devolucionService;
 
-    @Autowired
-    private DevolucionAssembler devolucionAssembler;
+    private final DevolucionAssembler devolucionAssembler;
 
-    @Autowired
-    private ReembolsoDevolucionAssembler reembolsoAssembler;
+    private final ReembolsoDevolucionAssembler reembolsoAssembler;
+
+    DevolucionController(DevolucionService devolucionService, DevolucionAssembler devolucionAssembler, ReembolsoDevolucionAssembler reembolsoAssembler) {
+        this.devolucionService = devolucionService;
+        this.devolucionAssembler = devolucionAssembler;
+        this.reembolsoAssembler = reembolsoAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Devolucion>>> listarTodas() {

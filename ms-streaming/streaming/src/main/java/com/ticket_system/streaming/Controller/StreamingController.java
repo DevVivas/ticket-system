@@ -10,7 +10,6 @@ import com.ticket_system.streaming.Service.StreamingService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -27,14 +26,17 @@ public class StreamingController {
 
     private static final Logger logger = LoggerFactory.getLogger(StreamingController.class);
 
-    @Autowired
-    private StreamingService streamingService;
+    private final StreamingService streamingService;
 
-    @Autowired
-    private StreamingAssembler streamingAssembler;
+    private final StreamingAssembler streamingAssembler;
 
-    @Autowired
-    private AccesoStreamingAssembler accesoAssembler;
+    private final AccesoStreamingAssembler accesoAssembler;
+
+    StreamingController(StreamingService streamingService, StreamingAssembler streamingAssembler, AccesoStreamingAssembler accesoAssembler) {
+        this.streamingService = streamingService;
+        this.streamingAssembler = streamingAssembler;
+        this.accesoAssembler = accesoAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Streaming>>> listarTodos() {

@@ -3,7 +3,6 @@ package com.ticket_system.recintos.Service;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ticket_system.recintos.DTO.RecintoDTO;
 import com.ticket_system.recintos.DTO.SectorDTO;
@@ -19,11 +18,14 @@ public class RecintoService {
 
     private static final Logger logger = LoggerFactory.getLogger(RecintoService.class);
 
-    @Autowired
-    private RecintoRepository recintoRepository;
+    private final RecintoRepository recintoRepository;
 
-    @Autowired
-    private SectorRepository sectorRepository;
+    private final SectorRepository sectorRepository;
+
+    RecintoService(RecintoRepository recintoRepository, SectorRepository sectorRepository) {
+        this.recintoRepository = recintoRepository;
+        this.sectorRepository = sectorRepository;
+    }
 
     public List<Recinto> obtenerTodos() {
         logger.info("[RECINTOS] Obteniendo todos los recintos");

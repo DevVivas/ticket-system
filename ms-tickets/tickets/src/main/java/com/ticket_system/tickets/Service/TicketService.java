@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ticket_system.tickets.DTO.TicketDTO;
 import com.ticket_system.tickets.Exception.BusinessException;
@@ -17,8 +16,11 @@ public class TicketService {
 
     private static final Logger logger = LoggerFactory.getLogger(TicketService.class);
 
-    @Autowired
-    private TicketRepository ticketRepository;
+    private final TicketRepository ticketRepository;
+
+    TicketService(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+    }
 
     public List<Ticket> obtenerTodos() {
         logger.info("[TICKETS] Obteniendo todos los tickets");

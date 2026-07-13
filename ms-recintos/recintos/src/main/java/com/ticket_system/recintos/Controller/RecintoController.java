@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -35,14 +34,17 @@ public class RecintoController {
 
     private static final Logger logger = LoggerFactory.getLogger(RecintoController.class);
 
-    @Autowired
-    private RecintoService recintoService;
+    private final RecintoService recintoService;
 
-    @Autowired
-    private RecintoAssembler recintoAssembler;
+    private final RecintoAssembler recintoAssembler;
 
-    @Autowired
-    private SectorAssembler sectorAssembler;
+    private final SectorAssembler sectorAssembler;
+
+    RecintoController(RecintoService recintoService, RecintoAssembler recintoAssembler, SectorAssembler sectorAssembler) {
+        this.recintoService = recintoService;
+        this.recintoAssembler = recintoAssembler;
+        this.sectorAssembler = sectorAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Recinto>>> getAll() {

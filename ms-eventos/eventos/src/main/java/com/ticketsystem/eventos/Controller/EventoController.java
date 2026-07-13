@@ -7,7 +7,6 @@ import com.ticketsystem.eventos.Service.EventoService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -22,11 +21,14 @@ public class EventoController {
 
     private static final Logger logger = LoggerFactory.getLogger(EventoController.class);
 
-    @Autowired
-    private EventoService eventoService;
+    private final EventoService eventoService;
 
-    @Autowired
-    private EventoAssembler eventoAssembler;
+    private final EventoAssembler eventoAssembler;
+
+    EventoController(EventoService eventoService, EventoAssembler eventoAssembler) {
+        this.eventoService = eventoService;
+        this.eventoAssembler = eventoAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Evento>>> getAll() {

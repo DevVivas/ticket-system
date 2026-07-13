@@ -10,7 +10,6 @@ import com.ticket_system.Repository.AgendaArtistaRepository;
 import com.ticket_system.Repository.ArtistaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,17 +21,20 @@ public class ArtistaService {
 
     private static final Logger logger = LoggerFactory.getLogger(ArtistaService.class);
 
-    @Autowired
-    private ArtistaRepository artistaRepository;
+    private final ArtistaRepository artistaRepository;
 
-    @Autowired
-    private AgendaArtistaRepository agendaArtistaRepository;
+    private final AgendaArtistaRepository agendaArtistaRepository;
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
 
     @Value("${ms.eventos.url}")
     private String msEventosUrl;
+
+    ArtistaService(ArtistaRepository artistaRepository, AgendaArtistaRepository agendaArtistaRepository, WebClient.Builder webClientBuilder) {
+        this.artistaRepository = artistaRepository;
+        this.agendaArtistaRepository = agendaArtistaRepository;
+        this.webClientBuilder = webClientBuilder;
+    }
 
     // ─── CRUD ARTISTAS ────────────────────────────────────────────────────────
 

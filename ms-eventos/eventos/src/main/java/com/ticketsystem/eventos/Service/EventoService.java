@@ -7,7 +7,6 @@ import com.ticketsystem.eventos.Model.Evento;
 import com.ticketsystem.eventos.Repository.EventoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -16,8 +15,11 @@ public class EventoService {
 
     private static final Logger logger = LoggerFactory.getLogger(EventoService.class);
 
-    @Autowired
-    private EventoRepository eventoRepository;
+    private final EventoRepository eventoRepository;
+
+    EventoService(EventoRepository eventoRepository) {
+        this.eventoRepository = eventoRepository;
+    }
 
     public List<Evento> obtenerTodos() {
         logger.info("[EVENTOS] Obteniendo todos los eventos");

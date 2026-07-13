@@ -10,7 +10,6 @@ import com.ticket_system.streaming.Repository.AccesoStreamingRepository;
 import com.ticket_system.streaming.Repository.StreamingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,20 +22,23 @@ public class StreamingService {
 
     private static final Logger logger = LoggerFactory.getLogger(StreamingService.class);
 
-    @Autowired
-    private StreamingRepository streamingRepository;
+    private final StreamingRepository streamingRepository;
 
-    @Autowired
-    private AccesoStreamingRepository accesoRepository;
+    private final AccesoStreamingRepository accesoRepository;
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
 
     @Value("${ms.eventos.url}")
     private String msEventosUrl;
 
     @Value("${ms.tickets.url}")
     private String msTicketsUrl;
+
+    StreamingService(StreamingRepository streamingRepository, AccesoStreamingRepository accesoRepository, WebClient.Builder webClientBuilder) {
+        this.streamingRepository = streamingRepository;
+        this.accesoRepository = accesoRepository;
+        this.webClientBuilder = webClientBuilder;
+    }
 
     // ─── CRUD STREAMING ───────────────────────────────────────────────────────
 

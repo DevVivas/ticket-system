@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -31,11 +30,14 @@ public class VentaController {
 
     private static final Logger logger = LoggerFactory.getLogger(VentaController.class);
 
-    @Autowired
-    private VentaService ventaService;
+    private final VentaService ventaService;
 
-    @Autowired
-    private VentaAssembler ventaAssembler;
+    private final VentaAssembler ventaAssembler;
+
+    VentaController(VentaService ventaService, VentaAssembler ventaAssembler) {
+        this.ventaService = ventaService;
+        this.ventaAssembler = ventaAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Venta>>> getAll() {

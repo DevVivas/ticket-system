@@ -10,7 +10,6 @@ import com.ticket_system.Service.ArtistaService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -24,14 +23,17 @@ public class ArtistaController {
 
     private static final Logger logger = LoggerFactory.getLogger(ArtistaController.class);
 
-    @Autowired
-    private ArtistaService artistaService;
+    private final ArtistaService artistaService;
 
-    @Autowired
-    private ArtistaAssembler artistaAssembler;
+    private final ArtistaAssembler artistaAssembler;
 
-    @Autowired
-    private AgendaArtistaAssembler agendaArtistaAssembler;
+    private final AgendaArtistaAssembler agendaArtistaAssembler;
+
+    ArtistaController(ArtistaService artistaService, ArtistaAssembler artistaAssembler, AgendaArtistaAssembler agendaArtistaAssembler) {
+        this.artistaService = artistaService;
+        this.artistaAssembler = artistaAssembler;
+        this.agendaArtistaAssembler = agendaArtistaAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Artista>>> listarTodos() {

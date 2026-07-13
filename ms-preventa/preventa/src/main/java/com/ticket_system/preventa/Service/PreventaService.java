@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ticket_system.preventa.DTO.CodigoBeneficioDTO;
@@ -20,8 +19,11 @@ public class PreventaService {
 
     private static final Logger logger = LoggerFactory.getLogger(PreventaService.class);
 
-    @Autowired
-    private CodigoBeneficioRepository codigoRepository;
+    private final CodigoBeneficioRepository codigoRepository;
+
+    PreventaService(CodigoBeneficioRepository codigoRepository) {
+        this.codigoRepository = codigoRepository;
+    }
 
     public List<CodigoBeneficio> obtenerTodos() {
         logger.info("Obteniendo todos los códigos de beneficio");

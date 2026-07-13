@@ -10,7 +10,6 @@ import com.ticket_system.Repository.DevolucionRepository;
 import com.ticket_system.Repository.ReembolsoDevolucionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,20 +22,23 @@ public class DevolucionService {
 
     private static final Logger logger = LoggerFactory.getLogger(DevolucionService.class);
 
-    @Autowired
-    private DevolucionRepository devolucionRepository;
+    private final DevolucionRepository devolucionRepository;
 
-    @Autowired
-    private ReembolsoDevolucionRepository reembolsoRepository;
+    private final ReembolsoDevolucionRepository reembolsoRepository;
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
 
     @Value("${ms.ventas.url}")
     private String msVentasUrl;
 
     @Value("${ms.tickets.url}")
     private String msTicketsUrl;
+
+    DevolucionService(DevolucionRepository devolucionRepository, ReembolsoDevolucionRepository reembolsoRepository, WebClient.Builder webClientBuilder) {
+        this.devolucionRepository = devolucionRepository;
+        this.reembolsoRepository = reembolsoRepository;
+        this.webClientBuilder = webClientBuilder;
+    }
 
     // ─── CRUD DEVOLUCIONES ────────────────────────────────────────────────────
 

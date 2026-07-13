@@ -10,7 +10,6 @@ import com.ticket_system.promotores.Service.PromotorService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -29,14 +28,17 @@ public class PromotorController {
 
     private static final Logger logger = LoggerFactory.getLogger(PromotorController.class);
 
-    @Autowired
-    private PromotorService promotorService;
+    private final PromotorService promotorService;
 
-    @Autowired
-    private PromotorAssembler promotorAssembler;
+    private final PromotorAssembler promotorAssembler;
 
-    @Autowired
-    private ComisionPromotorAssembler comisionAssembler;
+    private final ComisionPromotorAssembler comisionAssembler;
+
+    PromotorController(PromotorService promotorService, PromotorAssembler promotorAssembler, ComisionPromotorAssembler comisionAssembler) {
+        this.promotorService = promotorService;
+        this.promotorAssembler = promotorAssembler;
+        this.comisionAssembler = comisionAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Promotor>>> listarTodos() {

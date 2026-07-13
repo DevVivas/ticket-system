@@ -10,7 +10,6 @@ import com.ticket_system.promotores.Repository.ComisionPromotorRepository;
 import com.ticket_system.promotores.Repository.PromotorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,17 +22,20 @@ public class PromotorService {
 
     private static final Logger logger = LoggerFactory.getLogger(PromotorService.class);
 
-    @Autowired
-    private PromotorRepository promotorRepository;
+    private final PromotorRepository promotorRepository;
 
-    @Autowired
-    private ComisionPromotorRepository comisionRepository;
+    private final ComisionPromotorRepository comisionRepository;
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
 
     @Value("${ms.ventas.url}")
     private String msVentasUrl;
+
+    PromotorService(PromotorRepository promotorRepository, ComisionPromotorRepository comisionRepository, WebClient.Builder webClientBuilder) {
+        this.promotorRepository = promotorRepository;
+        this.comisionRepository = comisionRepository;
+        this.webClientBuilder = webClientBuilder;
+    }
 
     // ─── CRUD PROMOTORES ──────────────────────────────────────────────────────
 

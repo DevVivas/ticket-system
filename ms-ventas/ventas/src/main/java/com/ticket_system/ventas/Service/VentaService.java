@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.ticket_system.ventas.DTO.ItemVentaDTO;
@@ -20,11 +19,14 @@ public class VentaService {
 
     private static final Logger logger = LoggerFactory.getLogger(VentaService.class);
 
-    @Autowired
-    private VentaRepository ventaRepository;
+    private final VentaRepository ventaRepository;
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
+
+    VentaService(VentaRepository ventaRepository, WebClient.Builder webClientBuilder) {
+        this.ventaRepository = ventaRepository;
+        this.webClientBuilder = webClientBuilder;
+    }
 
     public List<Venta> obtenerTodos() {
         logger.info("[VENTAS] Obteniendo todas las ventas");

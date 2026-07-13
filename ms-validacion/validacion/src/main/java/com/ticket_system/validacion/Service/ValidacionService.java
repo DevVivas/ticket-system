@@ -10,7 +10,6 @@ import com.ticket_system.validacion.Repository.SesionValidacionRepository;
 import com.ticket_system.validacion.Repository.ValidacionTicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,20 +22,23 @@ public class ValidacionService {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidacionService.class);
 
-    @Autowired
-    private SesionValidacionRepository sesionRepository;
+    private final SesionValidacionRepository sesionRepository;
 
-    @Autowired
-    private ValidacionTicketRepository validacionRepository;
+    private final ValidacionTicketRepository validacionRepository;
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
 
     @Value("${ms.tickets.url}")
     private String msTicketsUrl;
 
     @Value("${ms.eventos.url}")
     private String msEventosUrl;
+
+    ValidacionService(SesionValidacionRepository sesionRepository, ValidacionTicketRepository validacionRepository, WebClient.Builder webClientBuilder) {
+        this.sesionRepository = sesionRepository;
+        this.validacionRepository = validacionRepository;
+        this.webClientBuilder = webClientBuilder;
+    }
 
     // ─── CRUD SESIONES ────────────────────────────────────────────────────────
 

@@ -10,7 +10,6 @@ import com.ticket_system.validacion.Service.ValidacionService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -24,14 +23,17 @@ public class ValidacionController {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidacionController.class);
 
-    @Autowired
-    private ValidacionService validacionService;
+    private final ValidacionService validacionService;
 
-    @Autowired
-    private SesionValidacionAssembler sesionValidacionAssembler;
+    private final SesionValidacionAssembler sesionValidacionAssembler;
 
-    @Autowired
-    private ValidacionTicketAssembler validacionTicketAssembler;
+    private final ValidacionTicketAssembler validacionTicketAssembler;
+
+    ValidacionController(ValidacionService validacionService, SesionValidacionAssembler sesionValidacionAssembler, ValidacionTicketAssembler validacionTicketAssembler) {
+        this.validacionService = validacionService;
+        this.sesionValidacionAssembler = sesionValidacionAssembler;
+        this.validacionTicketAssembler = validacionTicketAssembler;
+    }
 
     @GetMapping("/sesiones")
     public ResponseEntity<CollectionModel<EntityModel<SesionValidacion>>> listarSesiones() {

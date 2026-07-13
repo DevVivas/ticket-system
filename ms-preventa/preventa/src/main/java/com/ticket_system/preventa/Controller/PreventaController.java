@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -37,11 +36,14 @@ public class PreventaController {
 
     private static final Logger logger = LoggerFactory.getLogger(PreventaController.class);
 
-    @Autowired
-    private PreventaService preventaService;
+    private final PreventaService preventaService;
 
-    @Autowired
-    private CodigoBeneficioAssembler assembler;
+    private final CodigoBeneficioAssembler assembler;
+
+    PreventaController(PreventaService preventaService, CodigoBeneficioAssembler assembler) {
+        this.preventaService = preventaService;
+        this.assembler = assembler;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<CodigoBeneficio>>> getAll() {
