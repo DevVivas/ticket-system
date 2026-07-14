@@ -22,6 +22,8 @@ import com.ticket_system.recintos.Assembler.RecintoAssembler;
 import com.ticket_system.recintos.Assembler.SectorAssembler;
 import com.ticket_system.recintos.DTO.RecintoDTO;
 import com.ticket_system.recintos.DTO.SectorDTO;
+import com.ticket_system.recintos.Exception.BusinessException;
+import com.ticket_system.recintos.Exception.ResourceNotFoundException;
 import com.ticket_system.recintos.Model.Recinto;
 import com.ticket_system.recintos.Model.Sector;
 import com.ticket_system.recintos.Service.RecintoService;
@@ -71,7 +73,7 @@ public class RecintoController {
     public ResponseEntity<Recinto> update(@PathVariable Long id, @Valid @RequestBody RecintoDTO dto) {
         try {
             return ResponseEntity.ok(recintoService.actualizar(id, dto));
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -81,7 +83,7 @@ public class RecintoController {
         try {
             recintoService.eliminar(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -94,7 +96,7 @@ public class RecintoController {
             logger.info("POST /api/recintos/{}/sectores", id);
             return ResponseEntity.status(HttpStatus.CREATED)
                 .body(recintoService.agregarSector(id, dto));
-        } catch (RuntimeException e) {
+        } catch (BusinessException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -106,7 +108,7 @@ public class RecintoController {
                     .map(sectorAssembler::toModel)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(CollectionModel.of(sectores));
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -116,7 +118,7 @@ public class RecintoController {
         try {
             recintoService.eliminarSector(sectorId);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

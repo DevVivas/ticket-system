@@ -5,6 +5,8 @@ import com.ticket_system.ventas.Assembler.VentaAssembler;
 import com.ticket_system.ventas.Controller.VentaController;
 import com.ticket_system.ventas.DTO.ItemVentaDTO;
 import com.ticket_system.ventas.DTO.VentaDTO;
+import com.ticket_system.ventas.Exception.BusinessException;
+import com.ticket_system.ventas.Exception.ResourceNotFoundException;
 import com.ticket_system.ventas.Model.ItemVenta;
 import com.ticket_system.ventas.Model.Venta;
 import com.ticket_system.ventas.Service.VentaService;
@@ -89,8 +91,8 @@ class VentaControllerTest {
 
         mockMvc.perform(get("/api/ventas"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.ventas", hasSize(1)))
-                .andExpect(jsonPath("$._embedded.ventas[0].metodoPago").value("TARJETA"));
+                .andExpect(jsonPath("$._embedded.ventaList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.ventaList[0].metodoPago").value("TARJETA"));
     }
 
     @Test
@@ -115,7 +117,7 @@ class VentaControllerTest {
     @Test
     void getById_noExiste_debeRetornar404() throws Exception {
         when(ventaService.obtenerPorId(99L))
-                .thenThrow(new RuntimeException("Venta no encontrada con id: 99"));
+                .thenThrow(new ResourceNotFoundException("Venta no encontrada con id: 99"));
 
         mockMvc.perform(get("/api/ventas/99"))
                 .andExpect(status().isNotFound());
@@ -127,7 +129,7 @@ class VentaControllerTest {
 
         mockMvc.perform(get("/api/ventas/comprador/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.ventas", hasSize(1)));
+                .andExpect(jsonPath("$._embedded.ventaList", hasSize(1)));
     }
 
     @Test
@@ -145,7 +147,7 @@ class VentaControllerTest {
 
         mockMvc.perform(get("/api/ventas/evento/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.ventas", hasSize(1)));
+                .andExpect(jsonPath("$._embedded.ventaList", hasSize(1)));
     }
 
     @Test
@@ -194,12 +196,12 @@ class VentaControllerTest {
     }
 
     @Test
-    void cancelar_yaRechazada_debeRetornar400() throws Exception {
+    void cancelar_yaRechazada_debeRetornar422() throws Exception {
         when(ventaService.cancelar(1L))
-                .thenThrow(new RuntimeException("La venta ya fue rechazada anteriormente."));
+                .thenThrow(new BusinessException("La venta ya fue rechazada anteriormente."));
 
         mockMvc.perform(patch("/api/ventas/1/cancelar"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -212,7 +214,7 @@ class VentaControllerTest {
 
     @Test
     void delete_noExiste_debeRetornar404() throws Exception {
-        doThrow(new RuntimeException("Venta no encontrada")).when(ventaService).eliminar(99L);
+        doThrow(new ResourceNotFoundException("Venta no encontrada")).when(ventaService).eliminar(99L);
 
         mockMvc.perform(delete("/api/ventas/99"))
                 .andExpect(status().isNotFound());

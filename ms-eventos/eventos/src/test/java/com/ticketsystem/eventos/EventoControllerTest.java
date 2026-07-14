@@ -67,9 +67,9 @@ class EventoControllerTest {
 
         mockMvc.perform(get("/api/eventos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.eventos", hasSize(1)))
-                .andExpect(jsonPath("$._embedded.eventos[0].nombre").value("Karol G en Chile"))
-                .andExpect(jsonPath("$._embedded.eventos[0].estado").value("ACTIVO"));
+                .andExpect(jsonPath("$._embedded.eventoList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.eventoList[0].nombre").value("Karol G en Chile"))
+                .andExpect(jsonPath("$._embedded.eventoList[0].estado").value("ACTIVO"));
     }
 
     @Test

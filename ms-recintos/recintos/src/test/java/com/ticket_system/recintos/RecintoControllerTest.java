@@ -77,8 +77,8 @@ class RecintoControllerTest {
 
         mockMvc.perform(get("/api/recintos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.recintos", hasSize(1)))
-                .andExpect(jsonPath("$._embedded.recintos[0].nombre").value("Estadio Nacional"));
+                .andExpect(jsonPath("$._embedded.recintoList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.recintoList[0].nombre").value("Estadio Nacional"));
     }
 
     @Test
@@ -193,8 +193,8 @@ class RecintoControllerTest {
 
         mockMvc.perform(get("/api/recintos/1/sectores"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.sectors", hasSize(1)))
-                .andExpect(jsonPath("$._embedded.sectors[0].nombre").value("VIP"));
+                .andExpect(jsonPath("$._embedded.sectorList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.sectorList[0].nombre").value("VIP"));
     }
 
     @Test

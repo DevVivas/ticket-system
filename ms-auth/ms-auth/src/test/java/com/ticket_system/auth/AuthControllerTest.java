@@ -32,8 +32,7 @@ class AuthControllerTest {
     @MockitoBean
     private AuthService authService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void loginSuccess() throws Exception {
