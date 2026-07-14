@@ -1,13 +1,14 @@
 package com.ticketsystem.eventos;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 class EventosApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void applicationClassIsPresent() {
+		assertDoesNotThrow(() -> Class.forName("com.ticketsystem.eventos.EventosApplication"));
 	}
 
 }

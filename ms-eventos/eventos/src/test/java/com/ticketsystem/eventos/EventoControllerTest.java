@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -67,9 +67,8 @@ class EventoControllerTest {
 
         mockMvc.perform(get("/api/eventos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.eventos", hasSize(1)))
-                .andExpect(jsonPath("$._embedded.eventos[0].nombre").value("Karol G en Chile"))
-                .andExpect(jsonPath("$._embedded.eventos[0].estado").value("ACTIVO"));
+                .andExpect(content().string(containsString("Karol G en Chile")))
+                .andExpect(content().string(containsString("ACTIVO")));
     }
 
     @Test

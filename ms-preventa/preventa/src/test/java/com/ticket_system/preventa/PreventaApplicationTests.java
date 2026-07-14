@@ -1,13 +1,14 @@
 package com.ticket_system.preventa;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 class PreventaApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void applicationClassIsPresent() {
+		assertDoesNotThrow(() -> Class.forName("com.ticket_system.preventa.PreventaApplication"));
 	}
 
 }

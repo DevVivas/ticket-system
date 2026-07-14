@@ -1,5 +1,7 @@
 package com.ticket_system.ventas.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ public class ItemVenta {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venta_id", nullable = false)
+    @JsonIgnore
     private Venta venta;
 
     @NotNull(message = "El ticketId es obligatorio")

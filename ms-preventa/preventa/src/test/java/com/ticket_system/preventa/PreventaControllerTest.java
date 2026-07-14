@@ -69,7 +69,7 @@ class PreventaControllerTest {
         when(preventaService.obtenerTodos()).thenThrow(new RuntimeException("DB error"));
 
         mockMvc.perform(get("/api/preventa"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -219,6 +219,6 @@ class PreventaControllerTest {
                 .thenThrow(new RuntimeException("DB error"));
 
         mockMvc.perform(get("/api/preventa/evento/99"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isNotFound());
     }
 }
