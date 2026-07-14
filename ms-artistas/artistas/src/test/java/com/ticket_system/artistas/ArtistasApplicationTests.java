@@ -2,14 +2,12 @@ package com.ticket_system.artistas;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-<<<<<<< HEAD
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-=======
 @Disabled("Requiere base de datos MySQL en ejecucion")
 @SpringBootTest
->>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e
 class ArtistasApplicationTests {
 
 	@Test
