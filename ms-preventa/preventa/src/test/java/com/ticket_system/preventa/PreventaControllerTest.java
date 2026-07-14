@@ -3,6 +3,7 @@ package com.ticket_system.preventa;
 import com.ticket_system.preventa.Assembler.CodigoBeneficioAssembler;
 import com.ticket_system.preventa.Controller.PreventaController;
 import com.ticket_system.preventa.DTO.CodigoBeneficioDTO;
+import com.ticket_system.preventa.Exception.ResourceNotFoundException;
 import com.ticket_system.preventa.Model.CodigoBeneficio;
 import com.ticket_system.preventa.Service.PreventaService;
 import org.junit.jupiter.api.BeforeEach;
@@ -127,7 +128,7 @@ class PreventaControllerTest {
     @Test
     void update_cuandoNoExiste_debeRetornar404() throws Exception {
         when(preventaService.actualizar(eq(99L), any(CodigoBeneficioDTO.class)))
-                .thenThrow(new RuntimeException("Codigo no encontrado"));
+                .thenThrow(new ResourceNotFoundException("Codigo no encontrado"));
 
         mockMvc.perform(put("/api/preventa/99")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +146,7 @@ class PreventaControllerTest {
 
     @Test
     void delete_cuandoNoExiste_debeRetornar404() throws Exception {
-        doThrow(new RuntimeException("Codigo no encontrado"))
+        doThrow(new ResourceNotFoundException("Codigo no encontrado"))
                 .when(preventaService).eliminar(99L);
 
         mockMvc.perform(delete("/api/preventa/99"))
@@ -172,7 +173,7 @@ class PreventaControllerTest {
     @Test
     void validar_codigoInvalido_debeRetornar404() throws Exception {
         when(preventaService.validarCodigo("INVALIDO"))
-                .thenThrow(new RuntimeException("Codigo no valido"));
+                .thenThrow(new ResourceNotFoundException("Codigo no valido"));
 
         mockMvc.perform(post("/api/preventa/validar").param("codigo", "INVALIDO"))
                 .andExpect(status().isNotFound());
@@ -197,7 +198,7 @@ class PreventaControllerTest {
     @Test
     void desactivar_cuandoNoExiste_debeRetornar404() throws Exception {
         when(preventaService.desactivar(99L))
-                .thenThrow(new RuntimeException("Codigo no encontrado"));
+                .thenThrow(new ResourceNotFoundException("Codigo no encontrado"));
 
         mockMvc.perform(patch("/api/preventa/99/desactivar"))
                 .andExpect(status().isNotFound());

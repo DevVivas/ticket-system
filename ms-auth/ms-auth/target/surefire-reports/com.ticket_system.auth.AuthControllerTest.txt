@@ -1,6 +1,7 @@
 -------------------------------------------------------------------------------
 Test set: com.ticket_system.auth.AuthControllerTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 6, Failures: 0, Errors: 6, Skipped: 0, Time elapsed: 30.94 s <<< FAILURE! -- in com.ticket_system.auth.AuthControllerTest
 com.ticket_system.auth.AuthControllerTest.registerSuccess -- Time elapsed: 0.341 s <<< ERROR!
 org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'com.ticket_system.auth.AuthControllerTest': Unsatisfied dependency expressed through field 'objectMapper': No qualifying bean of type 'com.fasterxml.jackson.databind.ObjectMapper' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
@@ -200,3 +201,6 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:764)
 	... 23 more
 
+=======
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.49 s -- in com.ticket_system.auth.AuthControllerTest
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e

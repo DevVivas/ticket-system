@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ticket_system.ventas.Assembler.VentaAssembler;
 import com.ticket_system.ventas.DTO.VentaDTO;
+import com.ticket_system.ventas.Exception.ResourceNotFoundException;
 import com.ticket_system.ventas.Model.Venta;
 import com.ticket_system.ventas.Service.VentaService;
 
@@ -76,8 +77,8 @@ public class VentaController {
         try {
             logger.info("PATCH /api/ventas/{}/cancelar", id);
             return ResponseEntity.ok(ventaService.cancelar(id));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -86,7 +87,7 @@ public class VentaController {
         try {
             ventaService.eliminar(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

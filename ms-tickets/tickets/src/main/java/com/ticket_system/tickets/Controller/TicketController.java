@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ticket_system.tickets.Assembler.TicketAssembler;
 import com.ticket_system.tickets.DTO.TicketDTO;
+import com.ticket_system.tickets.Exception.BusinessException;
+import com.ticket_system.tickets.Exception.ResourceNotFoundException;
 import com.ticket_system.tickets.Model.Ticket;
 import com.ticket_system.tickets.Service.TicketService;
 
@@ -89,7 +91,7 @@ public class TicketController {
         try {
             logger.info("PUT /api/tickets/{}/vender", id);
             return ResponseEntity.ok(ticketService.marcarVendido(id));
-        } catch (RuntimeException e) {
+        } catch (BusinessException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -99,7 +101,7 @@ public class TicketController {
         try {
             logger.info("PUT /api/tickets/{}/usar", id);
             return ResponseEntity.ok(ticketService.marcarUsado(id));
-        } catch (RuntimeException e) {
+        } catch (BusinessException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -109,7 +111,7 @@ public class TicketController {
         try {
             logger.info("PUT /api/tickets/{}/anular", id);
             return ResponseEntity.ok(ticketService.anular(id));
-        } catch (RuntimeException e) {
+        } catch (BusinessException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -119,7 +121,7 @@ public class TicketController {
         try {
             ticketService.eliminar(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

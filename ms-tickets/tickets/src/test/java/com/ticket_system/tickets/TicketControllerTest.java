@@ -64,7 +64,12 @@ class TicketControllerTest {
 
         mockMvc.perform(get("/api/tickets"))
                 .andExpect(status().isOk())
+<<<<<<< HEAD
                 .andExpect(content().string(containsString("TK-001-UUID")));
+=======
+                .andExpect(jsonPath("$._embedded.ticketList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.ticketList[0].codigoUnico").value("TK-001-UUID"));
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e
     }
 
     @Test
@@ -118,7 +123,12 @@ class TicketControllerTest {
 
         mockMvc.perform(get("/api/tickets/evento/1"))
                 .andExpect(status().isOk())
+<<<<<<< HEAD
                 .andExpect(content().string(containsString("TK-001-UUID")));
+=======
+                .andExpect(jsonPath("$._embedded.ticketList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.ticketList[0].eventoId").value(1));
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e
     }
 
     @Test
@@ -135,7 +145,12 @@ class TicketControllerTest {
 
         mockMvc.perform(get("/api/tickets/comprador/1"))
                 .andExpect(status().isOk())
+<<<<<<< HEAD
                 .andExpect(content().string(containsString("TK-001-UUID")));
+=======
+                .andExpect(jsonPath("$._embedded.ticketList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.ticketList[0].compradorId").value(1));
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e
     }
 
     @Test

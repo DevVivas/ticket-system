@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.ticket_system.auth.JwtUtilTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.213 s -- in com.ticket_system.auth.JwtUtilTest
+=======
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.652 s -- in com.ticket_system.auth.JwtUtilTest
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e

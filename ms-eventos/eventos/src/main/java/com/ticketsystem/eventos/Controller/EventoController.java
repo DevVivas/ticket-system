@@ -2,6 +2,7 @@ package com.ticketsystem.eventos.Controller;
 
 import com.ticketsystem.eventos.Assembler.EventoAssembler;
 import com.ticketsystem.eventos.DTO.EventoDTO;
+import com.ticketsystem.eventos.Exception.ResourceNotFoundException;
 import com.ticketsystem.eventos.Model.Evento;
 import com.ticketsystem.eventos.Service.EventoService;
 import jakarta.validation.Valid;
@@ -56,7 +57,7 @@ public class EventoController {
     public ResponseEntity<Evento> update(@PathVariable Long id, @Valid @RequestBody EventoDTO dto) {
         try {
             return ResponseEntity.ok(eventoService.actualizar(id, dto));
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -66,7 +67,7 @@ public class EventoController {
         try {
             eventoService.eliminar(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -75,7 +76,7 @@ public class EventoController {
     public ResponseEntity<Evento> cancelar(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(eventoService.cancelar(id));
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

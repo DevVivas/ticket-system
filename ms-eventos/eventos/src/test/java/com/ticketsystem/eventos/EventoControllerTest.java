@@ -67,8 +67,14 @@ class EventoControllerTest {
 
         mockMvc.perform(get("/api/eventos"))
                 .andExpect(status().isOk())
+<<<<<<< HEAD
                 .andExpect(content().string(containsString("Karol G en Chile")))
                 .andExpect(content().string(containsString("ACTIVO")));
+=======
+                .andExpect(jsonPath("$._embedded.eventoList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.eventoList[0].nombre").value("Karol G en Chile"))
+                .andExpect(jsonPath("$._embedded.eventoList[0].estado").value("ACTIVO"));
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e
     }
 
     @Test

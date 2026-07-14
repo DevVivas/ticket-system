@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.ticket_system.preventa.DTO.CodigoBeneficioDTO;
+import com.ticket_system.preventa.Exception.ResourceNotFoundException;
 import com.ticket_system.preventa.Model.CodigoBeneficio;
 import com.ticket_system.preventa.Repository.CodigoBeneficioRepository;
 
@@ -54,7 +55,7 @@ public class PreventaService {
     public CodigoBeneficio actualizar(Long id, CodigoBeneficioDTO dto) {
         logger.info("Actualizando código de beneficio con id: {}", id);
         CodigoBeneficio codigo = codigoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Código no encontrado con id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Código no encontrado con id: " + id));
         codigo.setCodigo(dto.getCodigo());
         codigo.setTipo(dto.getTipo());
         codigo.setPorcentajeDescuento(dto.getPorcentajeDescuento());
@@ -67,7 +68,7 @@ public class PreventaService {
     public void eliminar(Long id) {
         logger.info("Eliminando código de beneficio con id: {}", id);
         if (!codigoRepository.existsById(id)) {
-            throw new RuntimeException("Código no encontrado con id: " + id);
+            throw new ResourceNotFoundException("Código no encontrado con id: " + id);
         }
         codigoRepository.deleteById(id);
     }
@@ -77,7 +78,7 @@ public class PreventaService {
         Map<String, Object> resultado = new HashMap<>();
 
         CodigoBeneficio cb = codigoRepository.findByCodigo(codigo)
-            .orElseThrow(() -> new RuntimeException("Código no válido: " + codigo));
+            .orElseThrow(() -> new ResourceNotFoundException("Código no válido: " + codigo));
 
         if (!cb.isActivo()) {
             resultado.put("valido", false);
@@ -109,7 +110,7 @@ public class PreventaService {
     public CodigoBeneficio desactivar(Long id) {
         logger.warn("Desactivando código de beneficio con id: {}", id);
         CodigoBeneficio cb = codigoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Código no encontrado con id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Código no encontrado con id: " + id));
         cb.setActivo(false);
         return codigoRepository.save(cb);
     }

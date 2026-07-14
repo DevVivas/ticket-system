@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 C:\Users\Usuario\Desktop\Projects\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\AuthControllerTest.java
 C:\Users\Usuario\Desktop\Projects\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\AuthServiceTest.java
 C:\Users\Usuario\Desktop\Projects\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\AutoConfigureMockMvc.java
 C:\Users\Usuario\Desktop\Projects\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\JwtUtilTest.java
 C:\Users\Usuario\Desktop\Projects\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\WebMvcTest.java
+=======
+C:\Users\lenov\OneDrive\Escritorio\ticket_system\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\AuthControllerTest.java
+C:\Users\lenov\OneDrive\Escritorio\ticket_system\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\AuthServiceTest.java
+C:\Users\lenov\OneDrive\Escritorio\ticket_system\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\AutoConfigureMockMvc.java
+C:\Users\lenov\OneDrive\Escritorio\ticket_system\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\JwtUtilTest.java
+C:\Users\lenov\OneDrive\Escritorio\ticket_system\ticket-system\ms-auth\ms-auth\src\test\java\com\ticket_system\auth\WebMvcTest.java
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e

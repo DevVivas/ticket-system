@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ticket_system.preventa.Assembler.CodigoBeneficioAssembler;
 import com.ticket_system.preventa.DTO.CodigoBeneficioDTO;
+import com.ticket_system.preventa.Exception.ResourceNotFoundException;
 import com.ticket_system.preventa.Model.CodigoBeneficio;
 import com.ticket_system.preventa.Service.PreventaService;
 
@@ -75,7 +76,7 @@ public class PreventaController {
         logger.info("[PREVENTA] PUT /api/preventa/{}", id);
         try {
             return ResponseEntity.ok(preventaService.actualizar(id, dto));
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -86,7 +87,7 @@ public class PreventaController {
         try {
             preventaService.eliminar(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -96,7 +97,7 @@ public class PreventaController {
         logger.info("[PREVENTA] POST /api/preventa/validar - codigo: {}", codigo);
         try {
             return ResponseEntity.ok(preventaService.validarCodigo(codigo));
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -106,7 +107,7 @@ public class PreventaController {
         logger.info("[PREVENTA] PATCH /api/preventa/{}/desactivar", id);
         try {
             return ResponseEntity.ok(preventaService.desactivar(id));
-        } catch (RuntimeException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

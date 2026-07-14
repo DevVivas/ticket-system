@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.ticketsystem.gateway.JwtAuthenticationFilterTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.43 s -- in com.ticketsystem.gateway.JwtAuthenticationFilterTest
+=======
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.969 s -- in com.ticketsystem.gateway.JwtAuthenticationFilterTest
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e

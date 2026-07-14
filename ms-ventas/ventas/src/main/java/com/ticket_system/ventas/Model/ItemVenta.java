@@ -1,7 +1,10 @@
 package com.ticket_system.ventas.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 149f6c408149174db7461989f988bcae9ec98e3e
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +25,7 @@ public class ItemVenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venta_id", nullable = false)
     @JsonIgnore

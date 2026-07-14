@@ -2,6 +2,8 @@ package com.ticket_system.ventas;
 
 // import com.ticket_system.ventas.DTO.ItemVentaDTO;
 // import com.ticket_system.ventas.DTO.VentaDTO;
+import com.ticket_system.ventas.Exception.BusinessException;
+import com.ticket_system.ventas.Exception.ResourceNotFoundException;
 import com.ticket_system.ventas.Model.ItemVenta;
 import com.ticket_system.ventas.Model.Venta;
 import com.ticket_system.ventas.Repository.VentaRepository;
@@ -72,7 +74,7 @@ class VentaServiceTest {
     void obtenerPorId_cuandoNoExiste_debeLanzarExcepcion() {
         when(ventaRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class,
+        assertThrows(ResourceNotFoundException.class,
             () -> ventaService.obtenerPorId(99L));
     }
 
@@ -94,7 +96,7 @@ class VentaServiceTest {
         venta.setEstado("RECHAZADA");
         when(ventaRepository.findById(1L)).thenReturn(Optional.of(venta));
 
-        assertThrows(RuntimeException.class,
+        assertThrows(BusinessException.class,
             () -> ventaService.cancelar(1L));
 
         verify(ventaRepository, never()).save(any());

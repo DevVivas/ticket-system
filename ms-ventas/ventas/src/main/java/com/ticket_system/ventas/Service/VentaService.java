@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.ticket_system.ventas.DTO.ItemVentaDTO;
 import com.ticket_system.ventas.DTO.VentaDTO;
+import com.ticket_system.ventas.Exception.BusinessException;
+import com.ticket_system.ventas.Exception.ResourceNotFoundException;
 import com.ticket_system.ventas.Model.ItemVenta;
 import com.ticket_system.ventas.Model.Venta;
 import com.ticket_system.ventas.Repository.VentaRepository;
@@ -36,7 +38,7 @@ public class VentaService {
     public Venta obtenerPorId(Long id) {
         logger.info("[VENTAS] Buscando venta con id: {}", id);
         return ventaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Venta no encontrada con id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con id: " + id));
     }
 
     public List<Venta> obtenerPorComprador(Long compradorId) {
@@ -65,7 +67,7 @@ public class VentaService {
                 if (ticketData != null) {
                     String estado = (String) ticketData.get("estado");
                     if (!"DISPONIBLE".equals(estado)) {
-                        throw new RuntimeException("El ticket " + itemDTO.getTicketId() +
+                        throw new BusinessException("El ticket " + itemDTO.getTicketId() +
                             " no está disponible. Estado actual: " + estado);
                     }
                 }
@@ -124,7 +126,7 @@ public class VentaService {
         logger.warn("[VENTAS] Cancelando venta con id: {}", id);
         Venta venta = obtenerPorId(id);
         if ("RECHAZADA".equals(venta.getEstado())) {
-            throw new RuntimeException("La venta ya fue rechazada anteriormente.");
+            throw new BusinessException("La venta ya fue rechazada anteriormente.");
         }
         venta.setEstado("RECHAZADA");
         Venta cancelada = ventaRepository.save(venta);
